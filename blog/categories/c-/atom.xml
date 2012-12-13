@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: c++ | Tommy Back]]></title>
+  <link href="http://murrekatt.github.com/blog/categories/c-/atom.xml" rel="self"/>
+  <link href="http://murrekatt.github.com/"/>
+  <updated>2012-12-13T20:44:37+01:00</updated>
+  <id>http://murrekatt.github.com/</id>
+  <author>
+    <name><![CDATA[Tommy Back]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Light-weight header only C++ unit testing framework]]></title>
+    <link href="http://murrekatt.github.com/blog/2012/12/13/light-weight-header-only-c-plus-plus-unit-testing-framework/"/>
+    <updated>2012-12-13T19:30:00+01:00</updated>
+    <id>http://murrekatt.github.com/blog/2012/12/13/light-weight-header-only-c-plus-plus-unit-testing-framework</id>
+    <content type="html"><![CDATA[<p>Unit testing is something I care about a lot and I've come to realize the enormous benefits it brings when you want to refactor and make changes to software. This is something I do a lot, because I like to evolve things and thus have a basis where I can make changes and at the same time feel confident that it still works. Another very important aspect of unit tests is that you can communicate how something is expected to work, i.e. the specification, both to yourself and also to others. This is very important and powerful.</p>
+
+<p>Currently, my main programming language is C++ and I'm using <a href="https://code.google.com/p/googletest/">Google test</a> to write and run unit tests. This is a great framework and I'm very happy with it. However, as an interesting exercise I decided to developed a small and light-weight unit testing framework that would work similarly to Google test, i.e. similar macros and so forth. My goal was to write a header-only test framework that has the most important features needed for unit testing. Also it should integrate with Continuous Integration systems like Hudson/Jenkins, i.e. the XML output must be readable by Hudson/Jenkins.</p>
+
+<p>I've completed an initial version I'm using in a few toy projects and I thought it could be nice to share it in case someone else might find it useful. It's <a href="https://github.com/murrekatt/cpput">available for download on github</a>, so please have a look and let me know what you think.</p>
+
+<p>In coming posts I'll describe how to use it and what my preferences when it comes to unit testing.</p>
+]]></content>
+  </entry>
+  
+</feed>
