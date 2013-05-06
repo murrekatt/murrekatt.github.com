@@ -42,7 +42,7 @@ function onClose(evt)
 
 function onMessage(evt)
 {
-  logMessage(evt.data);
+  logMessage(evt);
 }
 
 function onError(evt)
