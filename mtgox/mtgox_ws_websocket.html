@@ -9,7 +9,7 @@
     <div id="log">
     </div>
     <script language="javascript" type="text/javascript">
-
+      var websocket;
       var uri = 'ws://websocket.mtgox.com/mtgox';
       
       function init()
@@ -43,7 +43,7 @@
 
       function onOpen(evt)
       {
-        logToStatus('<span style="color: blue;"><strong>Info:</strong> Connected to' + uri + '</span>');
+        logToStatus('<span style="color: blue;"><strong>Info:</strong> Connected to ' + uri + '</span>');
       }
 
       function onClose(evt)
