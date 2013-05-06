@@ -1,5 +1,4 @@
 var websocket;
-var uri = 'wss://websocket.mtgox.com/mtgox';
 
 function init()
 {

@@ -1,4 +1,3 @@
-var uri = 'ws://socketio.mtgox.com/mtgox';
 var conn = io.connect(uri);
 conn.on('connect', function() {
   var e = document.getElementById('status');
