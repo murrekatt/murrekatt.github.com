@@ -4,24 +4,24 @@ function init()
 {
   if (window.MozWebSocket)
   {
-    logToStatus('<span style="color: orange;"><strong>Info:</strong> This browser supports WebSocket using the MozWebSocket constructor</span>');
+    logInfo('This browser supports WebSocket using the MozWebSocket constructor.');
     window.WebSocket = window.MozWebSocket;
   }
   else if (!window.WebSocket)
   {
-    logToStatus('<span style="color: red;"><strong>Error:</strong> This browser does not have support for WebSocket</span>');
+    logError('This browser does not have support for WebSocket.');
     return;
   }
   else
   {
-    logToStatus('<span style="color: blue;"><strong>Info:</strong> This browser supports WebSocket</span>');
+    logInfo('This browser supports WebSocket.');
   }
   connectWebSocket();
 }
 
 function connectWebSocket()
 {
-  logToStatus('<span style="color: blue;"><strong>Info:</strong> Connecting to ' + uri + '</span>');
+  logInfo('Connecting to ' + uri);
   websocket = new WebSocket(uri);
   websocket.onopen = function(evt) { onOpen(evt) };
   websocket.onclose = function(evt) { onClose(evt) };
@@ -31,36 +31,43 @@ function connectWebSocket()
 
 function onOpen(evt)
 {
-  logToStatus('<span style="color: blue;"><strong>Info:</strong> Connected to ' + uri + '</span>');
+  logInfo('Connected to ' + uri);
 }
 
 function onClose(evt)
 {
-  logToStatus('<span style="color: blue;"><strong>Info:</strong> Disconnected from: ' + uri + '</span>');
+  logInfo('Disconnected from: ' + uri);
   websocket.close();
 }
 
 function onMessage(evt)
 {
-  writeToLog('<span class="message">' + evt.data + '</span>');
+  logMessage(evt.data);
 }
 
 function onError(evt)
 {
-  logToStatus('<span style="color: red;"><strong>Error:</strong> ' + evt.data + '</span>');
+  logError(evt.data);
 }
 
-function logToStatus(message)
+function logInfo(message)
 {
   var pre = document.createElement('div');
-  pre.innerHTML = message;
+  pre.innerHTML = '<span style="color: blue;"><strong>Info:</strong> ' + message + '</span';
   document.getElementById('status').appendChild(pre);
 }
 
-function writeToLog(message)
+function logError(message)
 {
   var pre = document.createElement('div');
-  pre.innerHTML = message;
+  pre.innerHTML = '<span style="color: red;"><strong>Error:</strong> ' + message + '</span>';
+  document.getElementById('status').appendChild(pre);
+}
+
+function logMessage(message)
+{
+  var pre = document.createElement('div');
+  pre.innerHTML = '<div class="message">' + JSON.stringify(message) + '</div>';
   document.getElementById('log').appendChild(pre);
 }
 
