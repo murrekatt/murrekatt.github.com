@@ -54,7 +54,7 @@
 
       function onMessage(evt)
       {
-        writeToLog(evt.data);
+        writeToLog('<span class="message">' + evt.data + '</span>');
       }
 
       function onError(evt)
