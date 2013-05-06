@@ -1,0 +1,29 @@
+<html>
+  <head>
+    <link href="mtgox.css" type="text/css" rel="stylesheet" />
+  </head>
+  <body>
+    <h2>MtGox Streaming API</h2>
+    <div id="status">
+    </div>
+    <div id="log">
+    </div>
+    <script src="https://socketio.mtgox.com/socket.io/socket.io.js"></script>
+    <script>
+        var uri = 'wss://socketio.mtgox.com/mtgox';
+        var conn = io.connect(uri);
+        conn.on('connect', function() {
+          var e = document.getElementById('status');
+          e.innerHTML = e.innerHTML + '<div class="notice">Connected to ' + uri + '</div>';
+        });
+        conn.on('message', function(data) {
+            var e = document.getElementById('log');
+            e.innerHTML = e.innerHTML + '<div class="message">' + JSON.stringify(data) + '</div>';
+        });
+        conn.on('error', function(data) {
+          var e = document.getElementById('status');
+          e.innerHTML = e.innerHTML + '<div class="error">ERROR: ' + data + '</div>';
+        });
+    </script>
+  </body>
+</html>
