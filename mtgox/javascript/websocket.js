@@ -68,7 +68,7 @@ function onClose(evt)
 
 function onMessage(evt)
 {
-  logToConsole(evt);
+  logToConsole(evt.data);
 }
 
 function onError(evt)
