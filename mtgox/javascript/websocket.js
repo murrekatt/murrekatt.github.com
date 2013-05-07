@@ -76,7 +76,7 @@ function onError(evt)
   logError(evt.data);
 }
 
-function logToConsole()
+function logToConsole(message)
 {
   var pre = document.createElement("p");
   pre.innerHTML = message;
