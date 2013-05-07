@@ -13,10 +13,11 @@ function init()
   clearLogButton = document.getElementById("clearConsoleLogButton");
   clearLogButton.onclick = doClearLog;
       
-  connectBut = document.getElementById("connectButton");
-  connectBut.onclick = doConnect;
-  disconnectBut = document.getElementById("disconnectButton");
-  disconnectBut.onclick = doDisconnect;
+  connectButton = document.getElementById("connectButton");
+  connectButton.onclick = doConnect;
+  disconnectButton = document.getElementById("disconnectButton");
+  disconnectButton.onclick = doDisconnect;
+  disconnectButton.disabled = false;
   
   if (window.MozWebSocket)
   {
@@ -60,12 +61,16 @@ function doClearLog()
 function onOpen(evt)
 {
   logInfo('Connected to ' + uri);
+  connectButton.disabled = true;
+  disconnectButton.disabled = false;
 }
 
 function onClose(evt)
 {
   doDisconnect();
   logInfo('Disconnected from: ' + uri);
+  connectButton.disabled = false;
+  disconnectButton.disabled = true;
 }
 
 function onMessage(evt)
