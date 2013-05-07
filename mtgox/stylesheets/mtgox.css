@@ -10,7 +10,8 @@ div#statusLog {
 
 div#consoleLog {
   word-wrap: break-word;
-  margin-top: 1em;
+  margin-top: 0.7em;
+  margin-bottom: 0.7em;
   padding: 0.5em;
   background: #ccc;
   border: #aaa 1px solid;
