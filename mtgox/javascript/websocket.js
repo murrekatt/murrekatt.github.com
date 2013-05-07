@@ -46,7 +46,6 @@ function doConnect()
 
 function doDisconnect()
 {
-  logInfo('Disconnected from: ' + uri);
   websocket.close();
 }
 
@@ -66,6 +65,7 @@ function onOpen(evt)
 function onClose(evt)
 {
   doDisconnect();
+  logInfo('Disconnected from: ' + uri);
 }
 
 function onMessage(evt)
