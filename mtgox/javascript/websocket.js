@@ -1,3 +1,4 @@
+var statusLog;
 var consoleLog;
 var clearLogButton;
 var connectButton;
@@ -6,6 +7,7 @@ var websocket;
 
 function init()
 {
+  statusLog = document.getElementById('statusLog');
   consoleLog = document.getElementById("consoleLog");
 
   clearLogButton = document.getElementById("clearConsoleLogButton");
@@ -99,7 +101,8 @@ function log(color, category, message)
 {
   var pre = document.createElement('div');
   pre.innerHTML = '<span style="color: ' + color + ';"><strong>' + category + ':</strong> ' + message + '</span>';
-  document.getElementById('status').appendChild(pre);
+  statusLog.appendChild(pre);
+  statusLog.scrollTop = statusLog.scrollHeight;
 }
 
 window.addEventListener('load', init, false);
