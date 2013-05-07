@@ -17,7 +17,7 @@ function init()
   connectButton.onclick = doConnect;
   disconnectButton = document.getElementById("disconnectButton");
   disconnectButton.onclick = doDisconnect;
-  disconnectButton.disabled = false;
+  disconnectButton.disabled = true;
   
   if (window.MozWebSocket)
   {
