@@ -48,7 +48,7 @@ function doDisconnect()
   websocket.close();
 }
 
-function clearLog()
+function doClearLog()
 {
 	while (consoleLog.childNodes.length > 0)
 	{
