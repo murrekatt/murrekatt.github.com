@@ -6,6 +6,9 @@
     <h2>MtGox Streaming API</h2>
     <div id="statusLog">
     </div>
+    <input id="wsUri" size="35">
+    <input type="checkbox" id="secureCb" onClick="toggleTls();">
+    <span id="secureCbLabel" style="font-size: smaller; color: black;">Use secure WebSocket (TLS)</span><br />
     <button id="connectButton">Connect</button>
     <button id="disconnectButton">Disconnect</button>
     <div id="consoleLog">

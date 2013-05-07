@@ -1,3 +1,5 @@
+var secureCb;
+var wsUri;
 var statusLog;
 var consoleLog;
 var clearLogButton;
@@ -7,18 +9,6 @@ var websocket;
 
 function init()
 {
-  statusLog = document.getElementById('statusLog');
-  consoleLog = document.getElementById("consoleLog");
-
-  clearLogButton = document.getElementById("clearConsoleLogButton");
-  clearLogButton.onclick = doClearLog;
-      
-  connectButton = document.getElementById("connectButton");
-  connectButton.onclick = doConnect;
-  disconnectButton = document.getElementById("disconnectButton");
-  disconnectButton.onclick = doDisconnect;
-  disconnectButton.disabled = true;
-  
   if (window.MozWebSocket)
   {
     logInfo('This browser supports WebSocket using the MozWebSocket constructor.');
@@ -33,12 +23,48 @@ function init()
   {
     logInfo('This browser supports WebSocket.');
   }
+
+  statusLog = document.getElementById('statusLog');
+  consoleLog = document.getElementById("consoleLog");
+
+  secureCb = document.getElementById("secureCb");
+  secureCb.checked = false;
+  secureCb.onclick = toggleTls;
+  
+  wsUri = document.getElementById("wsUri");
+  toggleTls();
+
+  connectButton = document.getElementById("connectButton");
+  connectButton.onclick = doConnect;
+  disconnectButton = document.getElementById("disconnectButton");
+  disconnectButton.onclick = doDisconnect;
+  disconnectButton.disabled = true;
+  
+  clearLogButton = document.getElementById("clearConsoleLogButton");
+  clearLogButton.onclick = doClearLog;
+}
+
+function toggleTls()
+{
+  if (wsUri.value === "")
+  {
+    wsUri.value = "ws://websocket.mtgox.com/mtgox";
+  }
+  
+  if (secureCb.checked)
+  {
+    wsUri.value = wsUri.value.replace("ws:", "wss:");
+  }
+  else
+  {
+    wsUri.value = wsUri.value.replace ("wss:", "ws:");
+  }
 }
 
 function doConnect()
 {
-  logInfo('Connecting to ' + uri);
-  websocket = new WebSocket(uri);
+  logInfo('Connecting to ' + wsUri.value);
+  websocket = new WebSocket(wsUri.value);
   websocket.onopen = function(evt) { onOpen(evt) };
   websocket.onclose = function(evt) { onClose(evt) };
   websocket.onmessage = function(evt) { onMessage(evt) };
