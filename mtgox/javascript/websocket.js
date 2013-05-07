@@ -56,16 +56,6 @@ function doClearLog()
 	}
 }
 
-function logToConsole()
-{
-  var pre = document.createElement("p");
-  pre.style.wordWrap = "break-word";
-  pre.innerHTML = JSON.stringify(message);
-  consoleLog.appendChild(pre);
-
-  consoleLog.scrollTop = consoleLog.scrollHeight;
-}
-
 function onOpen(evt)
 {
   logInfo('Connected to ' + uri);
@@ -84,6 +74,15 @@ function onMessage(evt)
 function onError(evt)
 {
   logError(evt.data);
+}
+
+function logToConsole()
+{
+  var pre = document.createElement("p");
+  pre.innerHTML = message;
+  consoleLog.appendChild(pre);
+
+  consoleLog.scrollTop = consoleLog.scrollHeight;
 }
 
 function logInfo(message)
