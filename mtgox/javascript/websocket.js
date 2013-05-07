@@ -1,7 +1,21 @@
+var consoleLog;
+var clearLogButton;
+var connectButton;
+var disconnectButton;
 var websocket;
 
 function init()
 {
+  consoleLog = document.getElementById("consoleLog");
+
+  clearLogButton = document.getElementById("clearConsoleLogButton");
+  clearLogButton.onclick = doClearLog;
+      
+  connectBut = document.getElementById("connectButton");
+  connectBut.onclick = doConnect;
+  disconnectBut = document.getElementById("disconnectButton");
+  disconnectBut.onclick = doDisconnect;
+  
   if (window.MozWebSocket)
   {
     logInfo('This browser supports WebSocket using the MozWebSocket constructor.');
@@ -16,10 +30,9 @@ function init()
   {
     logInfo('This browser supports WebSocket.');
   }
-  connectWebSocket();
 }
 
-function connectWebSocket()
+function doConnect()
 {
   logInfo('Connecting to ' + uri);
   websocket = new WebSocket(uri);
@@ -29,6 +42,30 @@ function connectWebSocket()
   websocket.onerror = function(evt) { onError(evt) };
 }
 
+function doDisconnect()
+{
+  logInfo('Disconnected from: ' + uri);
+  websocket.close();
+}
+
+function clearLog()
+{
+	while (consoleLog.childNodes.length > 0)
+	{
+		consoleLog.removeChild(consoleLog.lastChild);
+	}
+}
+
+function logToConsole()
+{
+  var pre = document.createElement("p");
+  pre.style.wordWrap = "break-word";
+  pre.innerHTML = JSON.stringify(message);
+  consoleLog.appendChild(pre);
+
+  consoleLog.scrollTop = consoleLog.scrollHeight;
+}
+
 function onOpen(evt)
 {
   logInfo('Connected to ' + uri);
@@ -36,13 +73,12 @@ function onOpen(evt)
 
 function onClose(evt)
 {
-  logInfo('Disconnected from: ' + uri);
-  websocket.close();
+  doDisconnect();
 }
 
 function onMessage(evt)
 {
-  logMessage(evt);
+  logToConsole(evt);
 }
 
 function onError(evt)
@@ -62,13 +98,6 @@ function logError(message)
   var pre = document.createElement('div');
   pre.innerHTML = '<span style="color: red;"><strong>Error:</strong> ' + message + '</span>';
   document.getElementById('status').appendChild(pre);
-}
-
-function logMessage(message)
-{
-  var pre = document.createElement('div');
-  pre.innerHTML = '<div class="message">' + JSON.stringify(message) + '</div>';
-  document.getElementById('log').appendChild(pre);
 }
 
 window.addEventListener('load', init, false);
