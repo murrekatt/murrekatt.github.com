@@ -88,15 +88,18 @@ function onError(evt)
 
 function logInfo(message)
 {
-  var pre = document.createElement('div');
-  pre.innerHTML = '<span style="color: blue;"><strong>Info:</strong> ' + message + '</span';
-  document.getElementById('status').appendChild(pre);
+  log('blue', 'Info', message);
 }
 
 function logError(message)
 {
+  log('red', 'Error', message);
+}
+
+function log(color, category, message)
+{
   var pre = document.createElement('div');
-  pre.innerHTML = '<span style="color: red;"><strong>Error:</strong> ' + message + '</span>';
+  pre.innerHTML = '<span style="color: ' + color + ';"><strong>' + category + ':</strong> ' + message + '</span>';
   document.getElementById('status').appendChild(pre);
 }
 
