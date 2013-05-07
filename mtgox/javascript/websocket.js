@@ -86,7 +86,7 @@ function doClearLog()
 
 function onOpen(evt)
 {
-  logInfo('Connected to ' + uri);
+  logInfo('Connected to ' + wsUri.value);
   connectButton.disabled = true;
   disconnectButton.disabled = false;
 }
@@ -94,7 +94,7 @@ function onOpen(evt)
 function onClose(evt)
 {
   doDisconnect();
-  logInfo('Disconnected from: ' + uri);
+  logInfo('Disconnected from: ' + wsUri.value);
   connectButton.disabled = false;
   disconnectButton.disabled = true;
 }

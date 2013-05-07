@@ -20,7 +20,7 @@ div#consoleLog {
   background: #ccc;
   border: #aaa 1px solid;
   border-radius: 5px;
-  height: 70%;
+  height: 65%;
   overflow-y: scroll;
 }
 
