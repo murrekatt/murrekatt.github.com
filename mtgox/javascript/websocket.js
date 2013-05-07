@@ -9,21 +9,6 @@ var websocket;
 
 function init()
 {
-  if (window.MozWebSocket)
-  {
-    logInfo('This browser supports WebSocket using the MozWebSocket constructor.');
-    window.WebSocket = window.MozWebSocket;
-  }
-  else if (!window.WebSocket)
-  {
-    logError('This browser does not have support for WebSocket.');
-    return;
-  }
-  else
-  {
-    logInfo('This browser supports WebSocket.');
-  }
-
   statusLog = document.getElementById('statusLog');
   consoleLog = document.getElementById("consoleLog");
 
@@ -42,6 +27,21 @@ function init()
   
   clearLogButton = document.getElementById("clearConsoleLogButton");
   clearLogButton.onclick = doClearLog;
+
+  if (window.MozWebSocket)
+  {
+    logInfo('This browser supports WebSocket using the MozWebSocket constructor.');
+    window.WebSocket = window.MozWebSocket;
+  }
+  else if (!window.WebSocket)
+  {
+    logError('This browser does not have support for WebSocket.');
+    return;
+  }
+  else
+  {
+    logInfo('This browser supports WebSocket.');
+  }
 }
 
 function toggleTls()
