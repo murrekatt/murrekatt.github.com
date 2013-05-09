@@ -48,7 +48,7 @@ function toggleTls()
 {
   if (wsUri.value === "")
   {
-    wsUri.value = "ws://websocket.mtgox.com/mtgox";
+    wsUri.value = "ws://websocket.mtgox.com/mtgox?Currency=EUR,USD,CHF";
   }
   
   if (secureCb.checked)
