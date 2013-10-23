@@ -4,7 +4,7 @@
   <title><![CDATA[Category: testing | Tommy Back]]></title>
   <link href="http://murrekatt.github.com/blog/categories/testing/atom.xml" rel="self"/>
   <link href="http://murrekatt.github.com/"/>
-  <updated>2013-09-29T19:22:10+02:00</updated>
+  <updated>2013-10-23T22:30:16+02:00</updated>
   <id>http://murrekatt.github.com/</id>
   <author>
     <name><![CDATA[Tommy Back]]></name>
@@ -12,6 +12,57 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Unit Testing: Part 2]]></title>
+    <link href="http://murrekatt.github.com/blog/2013/10/23/unit-testing-part-2/"/>
+    <updated>2013-10-23T20:58:00+02:00</updated>
+    <id>http://murrekatt.github.com/blog/2013/10/23/unit-testing-part-2</id>
+    <content type="html"><![CDATA[<p><em>There are many related topics that come up when talking about unit testing. One of the most important ones in my mind is Continuous Integration. In this post I'll explain how I see Continuous Integration and its relationship with unit testing.</em></p>
+
+<h2>What is Continuous Integration?</h2>
+
+<p>Continuous Integration (CI) is a development process that runs whenever there are changes to be integrated into what one is building. The goal of CI in my view is to provide a platform to incrementally build high quality software and give transparency how changes affect things.</p>
+
+<p>In the case of software, CI takes source code changes and then rebuilds the software to incorporate these. While incorporating the changes the process applies any defined quality assurance checks to see if the build passes. Essentially this means that one sets up the quality assurance mechanisms that are needed in order to catch issues that are relevant.</p>
+
+<p>This is a key concept in modern software development and especially in Agile software development methodologies like Scrum.</p>
+
+<h2>Where do unit tests fit in?</h2>
+
+<p>Unit tests are part of the quality assurance mechanism and are run in order to make sure that the code changes are not breaking things. This is what unit testing automation is all about and this is a key ingredient of a good CI implementation.</p>
+
+<p>In order to have a sound CI system with automated unit tests, there are a few key things to consider. Let's look at the ones I consider most important.</p>
+
+<h3>There must be enough unit test coverage</h3>
+
+<p>It's clear that one have to start from zero unit tests at some point and it's preferable if this is when there is zero source code as well. Adding unit tests after the fact is usually very slow and hard, so keep them with from the start. They are not only there to prove that things work but also to help while doing the development work.</p>
+
+<h3>The unit tests must be fast</h3>
+
+<p>One of the properties of a good unit test is that it runs very fast.</p>
+
+<p>The goal is to have lots of unit tests because they increase the chances to catch bugs and thus increase software quality. Having many unit tests should not affect the time it takes to do a build very much, because we want to run all the tests for every build. It takes practice and skill to develop great software and the same goes for writing great unit tests.</p>
+
+<h3>Changing code means adding and adjusting unit tests to cover the changes</h3>
+
+<p>Working with unit tests are part of building software and therefore they are added, changed and removed as code is added, changed and removed. Very simple and takes discipline, especially when time is short.</p>
+
+<h3>Failing unit tests means failing the build</h3>
+
+<p>It is important to fail the build when there are failing unit tests. Even if there is only a single failing unit test. No compromise. Ever. This is part of being professional.</p>
+
+<h2>Why is Continuous Integration so great?</h2>
+
+<p>The main thing about CI is that it's a platform, a framework or simply a process that can take any shape one needs in order to get fast feedback to changes one is making while developing software. It sits in the venter of software development and can be hooked into other systems like source control and issue tracking systems to extend the automation of the software development process.</p>
+
+<p>Put even simpler - it is the platform for automation which is a very powerful thing.</p>
+
+<h3>Next part</h3>
+
+<p><em>In the next part I'll write about bug fixing and unit tests. I hope you enjoyed this one!</em></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Unit Testing: Part 1]]></title>
