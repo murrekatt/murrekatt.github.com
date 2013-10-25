@@ -4,7 +4,7 @@
   <title><![CDATA[Category: unittesting | Tommy Back]]></title>
   <link href="http://murrekatt.github.com/blog/categories/unittesting/atom.xml" rel="self"/>
   <link href="http://murrekatt.github.com/"/>
-  <updated>2013-10-23T22:30:16+02:00</updated>
+  <updated>2013-10-25T11:14:54+02:00</updated>
   <id>http://murrekatt.github.com/</id>
   <author>
     <name><![CDATA[Tommy Back]]></name>
@@ -12,6 +12,49 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Unit Testing: Part 3]]></title>
+    <link href="http://murrekatt.github.com/blog/2013/10/25/unit-testing-part-3/"/>
+    <updated>2013-10-25T09:34:00+02:00</updated>
+    <id>http://murrekatt.github.com/blog/2013/10/25/unit-testing-part-3</id>
+    <content type="html"><![CDATA[<p><em>Another topic that is closely related to unit testing, or testing in general of course, is bug fixing. In this part I will describe what I consider important and how I like to work when dealing with bugs.</em></p>
+
+<h2>How to approach a new bug?</h2>
+
+<p>When confronted with a new bug the goal is often simplified to only finding a fix. This is of course important, but it's not enough. Equally important is to prevent the bug from happening again and also to not break anything else while fixing this one. To achieve the latter two, we need to rely on unit testing. First, the new bug needs to get unit tests that catch it so it becomes visible when it happens again. Second, to avoid breaking other things we need to have enough unit tests to be comfortable making changes to the code base so we can fix the bug we're working with.</p>
+
+<h2>What is the best workflow?</h2>
+
+<p>There are many ways one can work and below is a way I have found to work extremely well. It takes some discipline but it's a clear and straight-forward way.</p>
+
+<h3>Reproduce the bug</h3>
+
+<p>In order to properly understand and fix a bug one needs to reproduce it and see how the software fails. This is not always possible and in the worst case one cannot understand what the problem really is or what triggers it. Let's focus on the ones that can be reproduced and fixed.</p>
+
+<h3>Use CI builds to track down when the bug was introduced</h3>
+
+<p>Again, the Continuous Integration system can show its powers, because now we can use old builds to quickly find the first build that introduced this problem (assuming it's something that has been working at some point of course). If we find the last build where it works we can check what was changed in the following build looking at the change list. This I have found to be a very effective way of finding the introduction and to understand what parts of the code to look at. This basically means going back in time to when the bug was introduced.</p>
+
+<h3>Add tests to catch the bug</h3>
+
+<p>Once we can reproduce the bug we need to write one or more unit tests that trigger this bug. This is key considering future prevention of the same bug.</p>
+
+<h3>Fix the bug</h3>
+
+<p>Now we are set to fix the code so that the bug gets resolved and all the unit tests pass.</p>
+
+<h3>Commit fix and verify that CI passes</h3>
+
+<p>Lastly we commit the fix and make sure that the CI system passes.</p>
+
+<p>This workflow is something I know works well and is concerned with programming and unit testing. It does not discard other types of testing or quality assurance that can come in addition to this later on.</p>
+
+<h3>Next part</h3>
+
+<p><em>In the next part I'll write about dependency injection which is a very powerful technique to break dependencies and thus get testable code. I hope you enjoyed this one!</em></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Unit Testing: Part 2]]></title>

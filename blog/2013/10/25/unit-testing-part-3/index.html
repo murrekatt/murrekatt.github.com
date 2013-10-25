@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>First post - Tommy Back</title>
+  <title>Unit Testing: Part 3 - Tommy Back</title>
   <meta name="author" content="Tommy Back">
 
   
-  <meta name="description" content="So, finally I&#8217;ve decided to start collecting and sharing some things I&#8217;ve come across that I think others might benefit from. Primarily &hellip;">
+  <meta name="description" content="Another topic that is closely related to unit testing, or testing in general of course, is bug fixing. In this part I will describe what I consider &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://murrekatt.github.com/blog/2012/12/02/first-post">
+  <link rel="canonical" href="http://murrekatt.github.com/blog/2013/10/25/unit-testing-part-3">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Tommy Back" type="application/atom+xml">
@@ -66,7 +66,7 @@
   
   <header>
     
-      <h1 class="entry-title">First Post</h1>
+      <h1 class="entry-title">Unit Testing: Part 3</h1>
     
     
       <p class="meta">
@@ -82,14 +82,48 @@
   
 
 
-<time datetime="2012-12-02T16:44:00+01:00" pubdate data-updated="true">Dec 2<span>nd</span>, 2012</time>
+<time datetime="2013-10-25T09:34:00+02:00" pubdate data-updated="true">Oct 25<span>th</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>So, finally I&#8217;ve decided to start collecting and sharing some things I&#8217;ve come across that I think others might benefit from. Primarily it&#8217;ll function as a notebook to myself about various topics. Hope you&#8217;ll enjoy it!</p>
+<div class="entry-content"><p><em>Another topic that is closely related to unit testing, or testing in general of course, is bug fixing. In this part I will describe what I consider important and how I like to work when dealing with bugs.</em></p>
+
+<h2>How to approach a new bug?</h2>
+
+<p>When confronted with a new bug the goal is often simplified to only finding a fix. This is of course important, but it&#8217;s not enough. Equally important is to prevent the bug from happening again and also to not break anything else while fixing this one. To achieve the latter two, we need to rely on unit testing. First, the new bug needs to get unit tests that catch it so it becomes visible when it happens again. Second, to avoid breaking other things we need to have enough unit tests to be comfortable making changes to the code base so we can fix the bug we&#8217;re working with.</p>
+
+<h2>What is the best workflow?</h2>
+
+<p>There are many ways one can work and below is a way I have found to work extremely well. It takes some discipline but it&#8217;s a clear and straight-forward way.</p>
+
+<h3>Reproduce the bug</h3>
+
+<p>In order to properly understand and fix a bug one needs to reproduce it and see how the software fails. This is not always possible and in the worst case one cannot understand what the problem really is or what triggers it. Let&#8217;s focus on the ones that can be reproduced and fixed.</p>
+
+<h3>Use CI builds to track down when the bug was introduced</h3>
+
+<p>Again, the Continuous Integration system can show its powers, because now we can use old builds to quickly find the first build that introduced this problem (assuming it&#8217;s something that has been working at some point of course). If we find the last build where it works we can check what was changed in the following build looking at the change list. This I have found to be a very effective way of finding the introduction and to understand what parts of the code to look at. This basically means going back in time to when the bug was introduced.</p>
+
+<h3>Add tests to catch the bug</h3>
+
+<p>Once we can reproduce the bug we need to write one or more unit tests that trigger this bug. This is key considering future prevention of the same bug.</p>
+
+<h3>Fix the bug</h3>
+
+<p>Now we are set to fix the code so that the bug gets resolved and all the unit tests pass.</p>
+
+<h3>Commit fix and verify that CI passes</h3>
+
+<p>Lastly we commit the fix and make sure that the CI system passes.</p>
+
+<p>This workflow is something I know works well and is concerned with programming and unit testing. It does not discard other types of testing or quality assurance that can come in addition to this later on.</p>
+
+<h3>Next part</h3>
+
+<p><em>In the next part I&#8217;ll write about dependency injection which is a very powerful technique to break dependencies and thus get testable code. I hope you enjoyed this one!</em></p>
 </div>
 
 
@@ -112,15 +146,21 @@
   
 
 
-<time datetime="2012-12-02T16:44:00+01:00" pubdate data-updated="true">Dec 2<span>nd</span>, 2012</time>
+<time datetime="2013-10-25T09:34:00+02:00" pubdate data-updated="true">Oct 25<span>th</span>, 2013</time>
       
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/bug-fixing/'>bug fixing</a>, <a class='category' href='/blog/categories/unittesting/'>unittesting</a>
+  
+</span>
 
 
     </p>
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://murrekatt.github.com/blog/2012/12/02/first-post/" data-via="" data-counturl="http://murrekatt.github.com/blog/2012/12/02/first-post/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://murrekatt.github.com/blog/2013/10/25/unit-testing-part-3/" data-via="" data-counturl="http://murrekatt.github.com/blog/2013/10/25/unit-testing-part-3/" >Tweet</a>
   
   
   
@@ -129,8 +169,8 @@
     
     <p class="meta">
       
+        <a class="basic-alignment left" href="/blog/2013/10/23/unit-testing-part-2/" title="Previous Post: Unit Testing: Part 2">&laquo; Unit Testing: Part 2</a>
       
-        <a class="basic-alignment right" href="/blog/2012/12/13/light-weight-header-only-c-plus-plus-unit-testing-framework/" title="Next Post: Light-weight header only C++ unit testing framework">Light-weight header only C++ unit testing framework &raquo;</a>
       
     </p>
   </footer>
@@ -244,8 +284,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://murrekatt.github.com/blog/2012/12/02/first-post/';
-        var disqus_url = 'http://murrekatt.github.com/blog/2012/12/02/first-post/';
+        var disqus_identifier = 'http://murrekatt.github.com/blog/2013/10/25/unit-testing-part-3/';
+        var disqus_url = 'http://murrekatt.github.com/blog/2013/10/25/unit-testing-part-3/';
         var disqus_script = 'embed.js';
       
     (function () {
