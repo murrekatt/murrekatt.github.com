@@ -4,7 +4,7 @@
   <title><![CDATA[Category: c++ | Tommy Back]]></title>
   <link href="http://murrekatt.github.com/blog/categories/c-/atom.xml" rel="self"/>
   <link href="http://murrekatt.github.com/"/>
-  <updated>2013-10-25T11:14:54+02:00</updated>
+  <updated>2013-10-25T20:15:01+02:00</updated>
   <id>http://murrekatt.github.com/</id>
   <author>
     <name><![CDATA[Tommy Back]]></name>
@@ -12,6 +12,132 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Unit Testing: Part 4]]></title>
+    <link href="http://murrekatt.github.com/blog/2013/10/30/unit-testing-part-4/"/>
+    <updated>2013-10-30T18:22:00+01:00</updated>
+    <id>http://murrekatt.github.com/blog/2013/10/30/unit-testing-part-4</id>
+    <content type="html"><![CDATA[<p><em>In this post I will be showing something that is of major importance when designing software that can be tested. It is a very powerful technique to break dependencies and it's called Dependency Injection (DI). I hope you enjoy it!</em></p>
+
+<h2>What is testable software?</h2>
+
+<p>In order to build high quality software it helps a lot to have unit tests as a central part of the development process. In modern software development this is well understood and you can read more about this in the other parts I have written about unit testing.</p>
+
+<p>Before it is possible to write unit tests, one must have code that can be tested. It is said that good software design and testable code go hand in hand. In my experience this is very true. What this means in practice is simply that well-designed code has the properties that are necessary to have in order to test it too. One of the key properties is to have code that has low dependencies and especially external dependencies like network, database or printer should not exist as direct dependencies to the code that we want to test. Hence, we want independent parts that are well-defined.</p>
+
+<h2>So what is Dependency Injection?</h2>
+
+<p>As the name suggests, it is a technique that injects the dependencies. Without a real context this probably sounds a bit weird, so imagine a class that uses a network connection. Instead of only having the network connection internally, it is probably better to give it when creating an instance of the class. I.e. inject the network connection or preferably inject an interface that can be implemented as a network connection. I wrote "probably" because it is of course not always correct to inject everything. This is no silver bullet either.</p>
+
+<h2>Example in C++ with virtual interface</h2>
+
+<p>Let's look at an example in C++ how it could look like when we break a dependency using DI. First, an example where a class uses a network connection internally to send some data.</p>
+
+<pre><code>class Client
+{
+public:
+  void send(const char* buffer, std::size_t length)
+  {
+    connection_.send(buffer, length);
+  }
+
+private:
+  Connection connection_;
+};
+</code></pre>
+
+<p>This is considered to be bad, because the class depends directly on the network connection itself. What we rather want is that the class is given an interface to something that we can implement as the network connection for production code, and mock in test. So, what would that look like?</p>
+
+<p>First we need an interface. We define an abstract base class (ABC) that we can use internally in the class.</p>
+
+<pre><code>struct IConnection
+{
+  virtual ~IConnection() {}
+  virtual void send(const char* buffer, std::size_t length) = 0;
+};
+</code></pre>
+
+<p>Next we need to modify the existing Connection class to implement the IConnection interface.</p>
+
+<pre><code>class Connection : public IConnection
+{
+public:
+  virtual ~Connection() {}
+  virtual void send(const char* buffer, std::size_t length)
+  {
+    // ...
+  }
+};
+</code></pre>
+
+<p>Then we need to pass in this interface into the class in question and then use it as before.</p>
+
+<pre><code>class Client
+{
+public:
+  explicit Client(IConnection* connection) : connection_(connection) {}
+
+  void send(const char* buffer, std::size_t length)
+  {
+    connection_-&gt;send(buffer, length);
+  }
+
+private:
+  IConnection* connection_;
+};
+</code></pre>
+
+<p>What we essentially have done is to instead of using a concrete class we now use an interface which means it can be exchanged for anything as long as it implements that interface. This is what we want, because then we can have one class that is the real network connection that we use for production code, and another class that we use in unit tests to not involve the network when testing the client itself. This is in line with good software design as well.</p>
+
+<p>It is important to note that this is not always the wanted solution as there are other ways to achieve similar results. Let's look at an alternative.</p>
+
+<h2>Example in C++ with a template</h2>
+
+<p>Again we start with the same initial client that uses the network connection directly.</p>
+
+<pre><code>class Client
+{
+public:
+  void send(const char* buffer, std::size_t length)
+  {
+    connection_.send(buffer, length);
+  }
+
+private:
+  Connection connection_;
+};
+</code></pre>
+
+<p>Now instead we can change the class into a template so that we can pass in the connection.</p>
+
+<pre><code>template &lt;typename TConnection&gt;
+class Client
+{
+public:
+  explicit Client(TConnection&amp; connection) : connection_(connection) {}
+
+  void send(const char* buffer, std::size_t length)
+  {
+    connection_.send(buffer, length);
+  }
+
+private:
+  TConnection&amp; connection_;
+};
+</code></pre>
+
+<p>This achieves the same results if having a template is fine. In some cases, this might not be ideal and in other this is even better than having a virtual interface.</p>
+
+<p>The same mechanism works for functions as well, i.e. one can break the dependency on a passed in argument by passing in an interface or making it into a template function an thus passing in a template argument.</p>
+
+<h2>What is the bottom line?</h2>
+
+<p>To me, DI is simply another tool that can be used when it makes sense. In my view, it does not make sense to inject everything just because it's possible. What does make sense to do every time is to write testable code and write unit tests to test it. This is part of the foundation of good quality.</p>
+
+<p>DI is a concept that can be used across programming languages and here I have showed you how it can be used in C++. I hope you enjoyed the post!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Unit Testing: Part 1]]></title>

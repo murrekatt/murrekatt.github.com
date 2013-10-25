@@ -4,7 +4,7 @@
   <title><![CDATA[Category: bug fixing | Tommy Back]]></title>
   <link href="http://murrekatt.github.com/blog/categories/bug-fixing/atom.xml" rel="self"/>
   <link href="http://murrekatt.github.com/"/>
-  <updated>2013-10-25T11:14:54+02:00</updated>
+  <updated>2013-10-25T20:15:01+02:00</updated>
   <id>http://murrekatt.github.com/</id>
   <author>
     <name><![CDATA[Tommy Back]]></name>
@@ -40,7 +40,7 @@
 
 <p>Once we can reproduce the bug we need to write one or more unit tests that trigger this bug. This is key considering future prevention of the same bug.</p>
 
-<h3>Fix the bug</h3>
+<h3>Fix the bug and pass the tests</h3>
 
 <p>Now we are set to fix the code so that the bug gets resolved and all the unit tests pass.</p>
 
