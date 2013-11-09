@@ -1,2 +1,2 @@
-var background_images = ['bg1.png', 'bg2.png', 'bg3.png', 'bg4.png', 'bg5.png', 'bg6.png', 'bg7.png', 'bg8.png', 'bg9.png', 'bg10.png', 'bg11.png'];
+var background_images = ['bg1-compressed.jpg', 'bg2-compressed.jpg', 'bg3-compressed.jpg', 'bg4-compressed.jpg', 'bg5-compressed.jpg', 'bg6-compressed.jpg', 'bg7-compressed.jpg', 'bg8-compressed.jpg', 'bg9-compressed.jpg', 'bg10-compressed.jpg', 'bg11-compressed.jpg'];
 $('html').css({'background-image': 'url(../images/' + background_images[Math.floor(Math.random() * background_images.length)] + ')'});
