@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: c++ | Tommy Back]]></title>
+  <link href="http://murrekatt.github.com/blog/categories/c-plus-plus/atom.xml" rel="self"/>
+  <link href="http://murrekatt.github.com/"/>
+  <updated>2013-11-09T17:55:44+01:00</updated>
+  <id>http://murrekatt.github.com/</id>
+  <author>
+    <name><![CDATA[Tommy Back]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Unit Testing: Part 4]]></title>
+    <link href="http://murrekatt.github.com/blog/2013/10/30/unit-testing-part-4/"/>
+    <updated>2013-10-30T18:22:00+01:00</updated>
+    <id>http://murrekatt.github.com/blog/2013/10/30/unit-testing-part-4</id>
+    <content type="html"><![CDATA[<p><em>In this post I will be showing something that is of major importance when designing software that can be tested. It is a very powerful technique to break dependencies and it&rsquo;s called Dependency Injection (DI). I hope you enjoy it!</em></p>
+
+<h2>What is testable software?</h2>
+
+<p>In order to build high quality software it helps a lot to have unit tests as a central part of the development process. In modern software development this is well understood and you can read more about this in the other parts I have written about unit testing.</p>
+
+<p>Before it is possible to write unit tests, one must have code that can be tested. It is said that good software design and testable code go hand in hand. In my experience this is very true. What this means in practice is simply that well-designed code has the properties that are necessary to have in order to test it too. One of the key properties is to have code that has low dependencies and especially external dependencies like network, database or printer should not exist as direct dependencies to the code that we want to test. Hence, we want independent parts that are well-defined.</p>
+
+<h2>So what is Dependency Injection?</h2>
+
+<p>As the name suggests, it is a technique that injects the dependencies. Without a real context this probably sounds a bit weird, so imagine a class that uses a network connection. Instead of only having the network connection internally, it is probably better to give it when creating an instance of the class. I.e. inject the network connection or preferably inject an interface that can be implemented as a network connection. I wrote &ldquo;probably&rdquo; because it is of course not always correct to inject everything. This is no silver bullet either.</p>
+
+<h2>Example in C++ with virtual interface</h2>
+
+<p>Let&rsquo;s look at an example in C++ how it could look like when we break a dependency using DI. First, an example where a class uses a network connection internally to send some data.</p>
+
+<pre><code>class Client
+{
+public:
+  void send(const char* buffer, std::size_t length)
+  {
+    connection_.send(buffer, length);
+  }
+
+private:
+  Connection connection_;
+};
+</code></pre>
+
+<p>This is considered to be bad, because the class depends directly on the network connection itself. What we rather want is that the class is given an interface to something that we can implement as the network connection for production code, and mock in test. So, what would that look like?</p>
+
+<p>First we need an interface. We define an abstract base class (ABC) that we can use internally in the class.</p>
+
+<pre><code>struct IConnection
+{
+  virtual ~IConnection() {}
+  virtual void send(const char* buffer, std::size_t length) = 0;
+};
+</code></pre>
+
+<p>Next we need to modify the existing Connection class to implement the IConnection interface.</p>
+
+<pre><code>class Connection : public IConnection
+{
+public:
+  virtual ~Connection() {}
+  virtual void send(const char* buffer, std::size_t length)
+  {
+    // ...
+  }
+};
+</code></pre>
+
+<p>Then we need to pass in this interface into the class in question and then use it as before.</p>
+
+<pre><code>class Client
+{
+public:
+  explicit Client(IConnection* connection) : connection_(connection) {}
+
+  void send(const char* buffer, std::size_t length)
+  {
+    connection_-&gt;send(buffer, length);
+  }
+
+private:
+  IConnection* connection_;
+};
+</code></pre>
+
+<p>What we essentially have done is to instead of using a concrete class we now use an interface which means it can be exchanged for anything as long as it implements that interface. This is what we want, because then we can have one class that is the real network connection that we use for production code, and another class that we use in unit tests to not involve the network when testing the client itself. This is in line with good software design as well.</p>
+
+<p>It is important to note that this is not always the wanted solution as there are other ways to achieve similar results. Let&rsquo;s look at an alternative.</p>
+
+<h2>Example in C++ with a template</h2>
+
+<p>Again we start with the same initial client that uses the network connection directly.</p>
+
+<pre><code>class Client
+{
+public:
+  void send(const char* buffer, std::size_t length)
+  {
+    connection_.send(buffer, length);
+  }
+
+private:
+  Connection connection_;
+};
+</code></pre>
+
+<p>Now instead we can change the class into a template so that we can pass in the connection.</p>
+
+<pre><code>template &lt;typename TConnection&gt;
+class Client
+{
+public:
+  explicit Client(TConnection&amp; connection) : connection_(connection) {}
+
+  void send(const char* buffer, std::size_t length)
+  {
+    connection_.send(buffer, length);
+  }
+
+private:
+  TConnection&amp; connection_;
+};
+</code></pre>
+
+<p>This achieves the same results if having a template is fine. In some cases, this might not be ideal and in other this is even better than having a virtual interface.</p>
+
+<p>The same mechanism works for functions as well, i.e. one can break the dependency on a passed in argument by passing in an interface or making it into a template function an thus passing in a template argument.</p>
+
+<h2>What is the bottom line?</h2>
+
+<p>To me, DI is simply another tool that can be used when it makes sense. In my view, it does not make sense to inject everything just because it&rsquo;s possible. What does make sense to do every time is to write testable code and write unit tests to test it. This is part of the foundation of good quality.</p>
+
+<p>DI is a concept that can be used across programming languages and here I have showed you how it can be used in C++. I hope you enjoyed the post!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Unit Testing: Part 1]]></title>
+    <link href="http://murrekatt.github.com/blog/2013/09/29/unit-testing-part-1/"/>
+    <updated>2013-09-29T17:00:00+02:00</updated>
+    <id>http://murrekatt.github.com/blog/2013/09/29/unit-testing-part-1</id>
+    <content type="html"><![CDATA[<p><em>There exists lots of great information and books about unit testing and I&rsquo;m not trying to re-invent that or necessarily come with anything new. This is more of a distilled version preliminary for myself how I think and go about unit testing and what I have found to work well. If someone else finds it useful, even better!</em></p>
+
+<h2>What is unit testing really?</h2>
+
+<p>Unit testing is about writing code that tests e.g. classes and functions as you&rsquo;re developing software to check that things work as expected. Hence, this activity is <strong>something software engineers do themselves</strong> and not something other people do after code has been written! This realization is fundamental and important. Think of unit tests as a safety net for us programmers so that we don&rsquo;t break things. It&rsquo;s also important to understand that unit tests are for small things, generically called units. Unit tests are not aimed at testing functionality across several parts or features in a system. They&rsquo;re about making sure that the building blocks are delivering what they promise so one can integrate them into larger software systems. Other types of testing targets other testing needs such as functional-, integration- as well as performance testing. These are all important and it&rsquo;s crucial to understand and keep them separate.</p>
+
+<p>Other important properties of unit tests are determinism, independency and speed. The first means that a test behaves in a deterministic manner and not random. Independency means that there are no external dependencies like database, network or disk. It&rsquo;s key to have very fast tests that are isolated and deterministic so that all tests can be run anytime you want, e.g. after any code change. Typically fast in this context means seconds to minutes and the number of tests means thousands or more.</p>
+
+<p>Unit tests have more to them than only testing the integrity of the code, they also function as a specification of what something should do and how it should work. They show how to use specific classes and functions and this help newcomers as well as others to understand a code base or an API.</p>
+
+<p>For unit tests to be valuable they must first of all be up to date and in use, but also descriptive, clean and focused. The added benefit means that when something breaks one will know precisely what broke because the tests are so clear and targeted. To achieve this one needs to be disciplined and have good practices and conventions.</p>
+
+<h2>What does a good unit test look like?</h2>
+
+<p>There are several ways to write good unit tests and here is what I have found to work very well for me in C++. Let&rsquo;s look at the following example test case.</p>
+
+<pre><code>TEST(Client, successfully_connects)
+{
+  // Arrange
+  Client client;
+  // Act
+  bool connected = client.connect();
+  // Assert
+  ASSERT_TRUE(connected);
+}
+</code></pre>
+
+<p>Firstly, it&rsquo;s very important to read the test case clearly and immediately understand what it means and what to expect. My preferred way for test name is to write it in lowercase with underscores to delimit the words. This is much clearer than UpperCamelCase. It&rsquo;s important to name it according to what it&rsquo;s doing and what to expect so everyone clearly understands.</p>
+
+<p>Secondly, I prefer to use <em>AAA</em>, that is, <em>Arrange</em>, <em>Act</em> and <em>Assert</em> to divide the test into clear parts. I don&rsquo;t aim to be dogmatic, but this works well most of the time. The first part arranges the necessary start (closely related to a fixture), the second part does the action, and the last part asserts what the test tests. This keeps the tests short, simple and clear. I find this providing a clear structure so anyone will understand the test and it restricts the tester to keep things short and focused. Many times I have seen single tests testing multiple things over multiple screens. This is not what you want! You want to have the user understand what the preconditions are i.e. the start and then understand what happens when you do &ldquo;one thing&rdquo;. That&rsquo;s it. Keep it simple is the key to success here as well.</p>
+
+<h2>How to use fixtures to be DRY?</h2>
+
+<p>To keep things clean and clear it&rsquo;s important to not clutter and repeat things. This is where fixtures enter the stage. I primarily think of a fixture as the preconditions that is the starting point for the test. They are about setting up state and tearing it down after the test.</p>
+
+<p>For the previous test case example, we only have a starting point of the creating the client, so it doesn&rsquo;t give much immediate simplification, however, for larger number of tests this is very powerful. Let&rsquo;s take a look at what it would look like with a fixture.</p>
+
+<pre><code>namespace
+{
+  struct ClientFixture
+  {
+    Client client_;
+  };
+}
+
+TEST_F(ClientFixture, successfully_connects)
+{
+  // Arrange
+  // Act
+  bool connected = client_.connect();
+  // Assert
+  ASSERT_TRUE(connected);
+}
+</code></pre>
+
+<p><em>As a side note, in C++ in .cpp files it&rsquo;s good practice to put code like the fixture into an anonymous namespace, because it should only be accessible in this compilation unit. If it&rsquo;s not put in an anonymous namespace it will cause linker errors if the same fixture name is also elsewhere. So, put it into the anonymous namespace.</em></p>
+
+<p>With the fixture we can now easily add another test that uses the same fixture and thus saves us in this trivial example the code under arrange that created the client. This is now implicitly available through the fixture.</p>
+
+<pre><code>TEST_F(ClientFixture, successfully_disconnects_even_if_not_connected)
+{
+  // Arrange
+  bool connected = client_.isConnected();
+  // Act
+  bool disconnected = client_.disconnect();
+  // Assert
+  ASSERT_FALSE(connected);
+  ASSERT_TRUE(disconnected);
+}
+</code></pre>
+
+<h2>How to keep unit tests valuable and affordable?</h2>
+
+<p>To keep unit tests valuable one needs to spend an effort to maintain their high quality. That means to refactor tests as the code they test change and to of course write new tests as new code is developed. All this comes at a price upfront, but pays itself back many times over the lifetime of a code base. This is key to understand in order to be successful long-term.</p>
+
+<p>Another insight I have had is that one must take a pragmatic approach to what one tests and balance it with what needs to be done. One could of course spend close to an infinite amount of time writing tests and not get any working software to ship. That balance is got through experience in building software as well as understanding oneself and what is needed to produce quality software.</p>
+
+<h3>Next part</h3>
+
+<p><em>There are several related topics to unit testing like Continuous Integration, bug fixing, TDD and more. I&rsquo;ll cover these in later parts about unit testing. I hope you enjoyed it!</em></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Light-weight header only C++ unit testing framework]]></title>
+    <link href="http://murrekatt.github.com/blog/2012/12/13/light-weight-header-only-c-plus-plus-unit-testing-framework/"/>
+    <updated>2012-12-13T19:30:00+01:00</updated>
+    <id>http://murrekatt.github.com/blog/2012/12/13/light-weight-header-only-c-plus-plus-unit-testing-framework</id>
+    <content type="html"><![CDATA[<p>Unit testing is something I care about a lot and I&rsquo;ve come to realize the enormous benefits it brings when you want to refactor and make changes to software. This is something I do a lot, because I like to evolve things and thus have a basis where I can make changes and at the same time feel confident that it still works. Another very important aspect of unit tests is that you can communicate how something is expected to work, i.e. the specification, both to yourself and also to others. This is very important and powerful.</p>
+
+<p>Currently, my main programming language is C++ and I&rsquo;m using <a href="https://code.google.com/p/googletest/">Google test</a> to write and run unit tests. This is a great framework and I&rsquo;m very happy with it. However, as an interesting exercise I decided to developed a small and light-weight unit testing framework that would work similarly to Google test, i.e. similar macros and so forth. My goal was to write a header-only test framework that has the most important features needed for unit testing. Also it should integrate with Continuous Integration systems like Hudson/Jenkins, i.e. the XML output must be readable by Hudson/Jenkins.</p>
+
+<p>I&rsquo;ve completed an initial version I&rsquo;m using in a few toy projects and I thought it could be nice to share it in case someone else might find it useful. It&rsquo;s <a href="https://github.com/murrekatt/cpput">available for download on github</a>, so please have a look and let me know what you think.</p>
+
+<p>In coming posts I&rsquo;ll describe how to use it and what my preferences when it comes to unit testing.</p>
+]]></content>
+  </entry>
+  
+</feed>

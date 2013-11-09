@@ -1,0 +1,2 @@
+var background_images = ['bg1.png', 'bg2.png', 'bg3.png', 'bg4.png', 'bg5.png', 'bg6.png', 'bg7.png', 'bg8.png', 'bg9.png', 'bg10.png', 'bg11.png'];
+$('html').css({'background-image': 'url(../images/' + background_images[Math.floor(Math.random() * background_images.length)] + ')'});

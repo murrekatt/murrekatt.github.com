@@ -31,6 +31,7 @@
 <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
 
+<script src="/javascripts/random-background-image.js"></script>
 
   
 
@@ -93,19 +94,19 @@
 
 <h2>How to approach a new bug?</h2>
 
-<p>When confronted with a new bug the goal is often simplified to only finding a fix. This is of course important, but it&#8217;s not enough. Equally important is to prevent the bug from happening again and also to not break anything else while fixing this one. To achieve the latter two, we need to rely on unit testing. First, the new bug needs to get unit tests that catch it so it becomes visible when it happens again. Second, to avoid breaking other things we need to have enough unit tests to be comfortable making changes to the code base so we can fix the bug we&#8217;re working with.</p>
+<p>When confronted with a new bug the goal is often simplified to only finding a fix. This is of course important, but it&rsquo;s not enough. Equally important is to prevent the bug from happening again and also to not break anything else while fixing this one. To achieve the latter two, we need to rely on unit testing. First, the new bug needs to get unit tests that catch it so it becomes visible when it happens again. Second, to avoid breaking other things we need to have enough unit tests to be comfortable making changes to the code base so we can fix the bug we&rsquo;re working with.</p>
 
 <h2>What is the best workflow?</h2>
 
-<p>There are many ways one can work and below is a way I have found to work extremely well. It takes some discipline but it&#8217;s a clear and straight-forward way.</p>
+<p>There are many ways one can work and below is a way I have found to work extremely well. It takes some discipline but it&rsquo;s a clear and straight-forward way.</p>
 
 <h3>Reproduce the bug</h3>
 
-<p>In order to properly understand and fix a bug one needs to reproduce it and see how the software fails. This is not always possible and in the worst case one cannot understand what the problem really is or what triggers it. Let&#8217;s focus on the ones that can be reproduced and fixed.</p>
+<p>In order to properly understand and fix a bug one needs to reproduce it and see how the software fails. This is not always possible and in the worst case one cannot understand what the problem really is or what triggers it. Let&rsquo;s focus on the ones that can be reproduced and fixed.</p>
 
 <h3>Use CI builds to track down when the bug was introduced</h3>
 
-<p>Again, the Continuous Integration system can show its powers, because now we can use old builds to quickly find the first build that introduced this problem (assuming it&#8217;s something that has been working at some point of course). If we find the last build where it works we can check what was changed in the following build looking at the change list. This I have found to be a very effective way of finding the introduction and to understand what parts of the code to look at. This basically means going back in time to when the bug was introduced.</p>
+<p>Again, the Continuous Integration system can show its powers, because now we can use old builds to quickly find the first build that introduced this problem (assuming it&rsquo;s something that has been working at some point of course). If we find the last build where it works we can check what was changed in the following build looking at the change list. This I have found to be a very effective way of finding the introduction and to understand what parts of the code to look at. This basically means going back in time to when the bug was introduced.</p>
 
 <h3>Add tests to catch the bug</h3>
 
@@ -123,7 +124,7 @@
 
 <h3>Next part</h3>
 
-<p><em>In the next part I&#8217;ll write about dependency injection which is a very powerful technique to break dependencies and thus get testable code. I hope you enjoyed this one!</em></p>
+<p><em>In the next part I&rsquo;ll write about dependency injection which is a very powerful technique to break dependencies and thus get testable code. I hope you enjoyed this one!</em></p>
 </div>
 
 
@@ -159,8 +160,6 @@
     </p>
     
       <div class="sharing">
-  
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://murrekatt.github.com/blog/2013/10/25/unit-testing-part-3/" data-via="" data-counturl="http://murrekatt.github.com/blog/2013/10/25/unit-testing-part-3/" >Tweet</a>
   
   
   

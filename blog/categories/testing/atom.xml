@@ -4,7 +4,7 @@
   <title><![CDATA[Category: testing | Tommy Back]]></title>
   <link href="http://murrekatt.github.com/blog/categories/testing/atom.xml" rel="self"/>
   <link href="http://murrekatt.github.com/"/>
-  <updated>2013-10-26T16:00:35+02:00</updated>
+  <updated>2013-11-09T17:55:44+01:00</updated>
   <id>http://murrekatt.github.com/</id>
   <author>
     <name><![CDATA[Tommy Back]]></name>
@@ -18,7 +18,7 @@
     <link href="http://murrekatt.github.com/blog/2013/10/23/unit-testing-part-2/"/>
     <updated>2013-10-23T20:58:00+02:00</updated>
     <id>http://murrekatt.github.com/blog/2013/10/23/unit-testing-part-2</id>
-    <content type="html"><![CDATA[<p><em>There are many related topics that come up when talking about unit testing. One of the most important ones in my mind is Continuous Integration. In this post I'll explain how I see Continuous Integration and its relationship with unit testing.</em></p>
+    <content type="html"><![CDATA[<p><em>There are many related topics that come up when talking about unit testing. One of the most important ones in my mind is Continuous Integration. In this post I&rsquo;ll explain how I see Continuous Integration and its relationship with unit testing.</em></p>
 
 <h2>What is Continuous Integration?</h2>
 
@@ -32,11 +32,11 @@
 
 <p>Unit tests are part of the quality assurance mechanism and are run in order to make sure that the code changes are not breaking things. This is what unit testing automation is all about and this is a key ingredient of a good CI implementation.</p>
 
-<p>In order to have a sound CI system with automated unit tests, there are a few key things to consider. Let's look at the ones I consider most important.</p>
+<p>In order to have a sound CI system with automated unit tests, there are a few key things to consider. Let&rsquo;s look at the ones I consider most important.</p>
 
 <h3>There must be enough unit test coverage</h3>
 
-<p>It's clear that one have to start from zero unit tests at some point and it's preferable if this is when there is zero source code as well. Adding unit tests after the fact is usually very slow and hard, so keep them with from the start. They are not only there to prove that things work but also to help while doing the development work.</p>
+<p>It&rsquo;s clear that one have to start from zero unit tests at some point and it&rsquo;s preferable if this is when there is zero source code as well. Adding unit tests after the fact is usually very slow and hard, so keep them with from the start. They are not only there to prove that things work but also to help while doing the development work.</p>
 
 <h3>The unit tests must be fast</h3>
 
@@ -54,13 +54,13 @@
 
 <h2>Why is Continuous Integration so great?</h2>
 
-<p>The main thing about CI is that it's a platform, a framework or simply a process that can take any shape one needs in order to get fast feedback to changes one is making while developing software. It sits in the venter of software development and can be hooked into other systems like source control and issue tracking systems to extend the automation of the software development process.</p>
+<p>The main thing about CI is that it&rsquo;s a platform, a framework or simply a process that can take any shape one needs in order to get fast feedback to changes one is making while developing software. It sits in the venter of software development and can be hooked into other systems like source control and issue tracking systems to extend the automation of the software development process.</p>
 
-<p>Put even simpler - it is the platform for automation which is a very powerful thing.</p>
+<p>Put even simpler &ndash; it is the platform for automation which is a very powerful thing.</p>
 
 <h3>Next part</h3>
 
-<p><em>In the next part I'll write about bug fixing and unit tests. I hope you enjoyed this one!</em></p>
+<p><em>In the next part I&rsquo;ll write about bug fixing and unit tests. I hope you enjoyed this one!</em></p>
 ]]></content>
   </entry>
   
@@ -69,13 +69,13 @@
     <link href="http://murrekatt.github.com/blog/2013/09/29/unit-testing-part-1/"/>
     <updated>2013-09-29T17:00:00+02:00</updated>
     <id>http://murrekatt.github.com/blog/2013/09/29/unit-testing-part-1</id>
-    <content type="html"><![CDATA[<p><em>There exists lots of great information and books about unit testing and I'm not trying to re-invent that or necessarily come with anything new. This is more of a distilled version preliminary for myself how I think and go about unit testing and what I have found to work well. If someone else finds it useful, even better!</em></p>
+    <content type="html"><![CDATA[<p><em>There exists lots of great information and books about unit testing and I&rsquo;m not trying to re-invent that or necessarily come with anything new. This is more of a distilled version preliminary for myself how I think and go about unit testing and what I have found to work well. If someone else finds it useful, even better!</em></p>
 
 <h2>What is unit testing really?</h2>
 
-<p>Unit testing is about writing code that tests e.g. classes and functions as you're developing software to check that things work as expected. Hence, this activity is <strong>something software engineers do themselves</strong> and not something other people do after code has been written! This realization is fundamental and important. Think of unit tests as a safety net for us programmers so that we don't break things. It's also important to understand that unit tests are for small things, generically called units. Unit tests are not aimed at testing functionality across several parts or features in a system. They're about making sure that the building blocks are delivering what they promise so one can integrate them into larger software systems. Other types of testing targets other testing needs such as functional-, integration- as well as performance testing. These are all important and it's crucial to understand and keep them separate.</p>
+<p>Unit testing is about writing code that tests e.g. classes and functions as you&rsquo;re developing software to check that things work as expected. Hence, this activity is <strong>something software engineers do themselves</strong> and not something other people do after code has been written! This realization is fundamental and important. Think of unit tests as a safety net for us programmers so that we don&rsquo;t break things. It&rsquo;s also important to understand that unit tests are for small things, generically called units. Unit tests are not aimed at testing functionality across several parts or features in a system. They&rsquo;re about making sure that the building blocks are delivering what they promise so one can integrate them into larger software systems. Other types of testing targets other testing needs such as functional-, integration- as well as performance testing. These are all important and it&rsquo;s crucial to understand and keep them separate.</p>
 
-<p>Other important properties of unit tests are determinism, independency and speed. The first means that a test behaves in a deterministic manner and not random. Independency means that there are no external dependencies like database, network or disk. It's key to have very fast tests that are isolated and deterministic so that all tests can be run anytime you want, e.g. after any code change. Typically fast in this context means seconds to minutes and the number of tests means thousands or more.</p>
+<p>Other important properties of unit tests are determinism, independency and speed. The first means that a test behaves in a deterministic manner and not random. Independency means that there are no external dependencies like database, network or disk. It&rsquo;s key to have very fast tests that are isolated and deterministic so that all tests can be run anytime you want, e.g. after any code change. Typically fast in this context means seconds to minutes and the number of tests means thousands or more.</p>
 
 <p>Unit tests have more to them than only testing the integrity of the code, they also function as a specification of what something should do and how it should work. They show how to use specific classes and functions and this help newcomers as well as others to understand a code base or an API.</p>
 
@@ -83,7 +83,7 @@
 
 <h2>What does a good unit test look like?</h2>
 
-<p>There are several ways to write good unit tests and here is what I have found to work very well for me in C++. Let's look at the following example test case.</p>
+<p>There are several ways to write good unit tests and here is what I have found to work very well for me in C++. Let&rsquo;s look at the following example test case.</p>
 
 <pre><code>TEST(Client, successfully_connects)
 {
@@ -96,15 +96,15 @@
 }
 </code></pre>
 
-<p>Firstly, it's very important to read the test case clearly and immediately understand what it means and what to expect. My preferred way for test name is to write it in lowercase with underscores to delimit the words. This is much clearer than UpperCamelCase. It's important to name it according to what it's doing and what to expect so everyone clearly understands.</p>
+<p>Firstly, it&rsquo;s very important to read the test case clearly and immediately understand what it means and what to expect. My preferred way for test name is to write it in lowercase with underscores to delimit the words. This is much clearer than UpperCamelCase. It&rsquo;s important to name it according to what it&rsquo;s doing and what to expect so everyone clearly understands.</p>
 
-<p>Secondly, I prefer to use <em>AAA</em>, that is, <em>Arrange</em>, <em>Act</em> and <em>Assert</em> to divide the test into clear parts. I don't aim to be dogmatic, but this works well most of the time. The first part arranges the necessary start (closely related to a fixture), the second part does the action, and the last part asserts what the test tests. This keeps the tests short, simple and clear. I find this providing a clear structure so anyone will understand the test and it restricts the tester to keep things short and focused. Many times I have seen single tests testing multiple things over multiple screens. This is not what you want! You want to have the user understand what the preconditions are i.e. the start and then understand what happens when you do "one thing". That's it. Keep it simple is the key to success here as well.</p>
+<p>Secondly, I prefer to use <em>AAA</em>, that is, <em>Arrange</em>, <em>Act</em> and <em>Assert</em> to divide the test into clear parts. I don&rsquo;t aim to be dogmatic, but this works well most of the time. The first part arranges the necessary start (closely related to a fixture), the second part does the action, and the last part asserts what the test tests. This keeps the tests short, simple and clear. I find this providing a clear structure so anyone will understand the test and it restricts the tester to keep things short and focused. Many times I have seen single tests testing multiple things over multiple screens. This is not what you want! You want to have the user understand what the preconditions are i.e. the start and then understand what happens when you do &ldquo;one thing&rdquo;. That&rsquo;s it. Keep it simple is the key to success here as well.</p>
 
 <h2>How to use fixtures to be DRY?</h2>
 
-<p>To keep things clean and clear it's important to not clutter and repeat things. This is where fixtures enter the stage. I primarily think of a fixture as the preconditions that is the starting point for the test. They are about setting up state and tearing it down after the test.</p>
+<p>To keep things clean and clear it&rsquo;s important to not clutter and repeat things. This is where fixtures enter the stage. I primarily think of a fixture as the preconditions that is the starting point for the test. They are about setting up state and tearing it down after the test.</p>
 
-<p>For the previous test case example, we only have a starting point of the creating the client, so it doesn't give much immediate simplification, however, for larger number of tests this is very powerful. Let's take a look at what it would look like with a fixture.</p>
+<p>For the previous test case example, we only have a starting point of the creating the client, so it doesn&rsquo;t give much immediate simplification, however, for larger number of tests this is very powerful. Let&rsquo;s take a look at what it would look like with a fixture.</p>
 
 <pre><code>namespace
 {
@@ -124,7 +124,7 @@ TEST_F(ClientFixture, successfully_connects)
 }
 </code></pre>
 
-<p><em>As a side note, in C++ in .cpp files it's good practice to put code like the fixture into an anonymous namespace, because it should only be accessible in this compilation unit. If it's not put in an anonymous namespace it will cause linker errors if the same fixture name is also elsewhere. So, put it into the anonymous namespace.</em></p>
+<p><em>As a side note, in C++ in .cpp files it&rsquo;s good practice to put code like the fixture into an anonymous namespace, because it should only be accessible in this compilation unit. If it&rsquo;s not put in an anonymous namespace it will cause linker errors if the same fixture name is also elsewhere. So, put it into the anonymous namespace.</em></p>
 
 <p>With the fixture we can now easily add another test that uses the same fixture and thus saves us in this trivial example the code under arrange that created the client. This is now implicitly available through the fixture.</p>
 
@@ -148,7 +148,7 @@ TEST_F(ClientFixture, successfully_connects)
 
 <h3>Next part</h3>
 
-<p><em>There are several related topics to unit testing like Continuous Integration, bug fixing, TDD and more. I'll cover these in later parts about unit testing. I hope you enjoyed it!</em></p>
+<p><em>There are several related topics to unit testing like Continuous Integration, bug fixing, TDD and more. I&rsquo;ll cover these in later parts about unit testing. I hope you enjoyed it!</em></p>
 ]]></content>
   </entry>
   

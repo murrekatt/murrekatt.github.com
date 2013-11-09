@@ -4,7 +4,7 @@
   <title><![CDATA[Tommy Back]]></title>
   <link href="http://murrekatt.github.com/atom.xml" rel="self"/>
   <link href="http://murrekatt.github.com/"/>
-  <updated>2013-10-26T16:00:35+02:00</updated>
+  <updated>2013-11-09T17:55:44+01:00</updated>
   <id>http://murrekatt.github.com/</id>
   <author>
     <name><![CDATA[Tommy Back]]></name>
@@ -18,7 +18,7 @@
     <link href="http://murrekatt.github.com/blog/2013/10/30/unit-testing-part-4/"/>
     <updated>2013-10-30T18:22:00+01:00</updated>
     <id>http://murrekatt.github.com/blog/2013/10/30/unit-testing-part-4</id>
-    <content type="html"><![CDATA[<p><em>In this post I will be showing something that is of major importance when designing software that can be tested. It is a very powerful technique to break dependencies and it&#8217;s called Dependency Injection (DI). I hope you enjoy it!</em></p>
+    <content type="html"><![CDATA[<p><em>In this post I will be showing something that is of major importance when designing software that can be tested. It is a very powerful technique to break dependencies and it&rsquo;s called Dependency Injection (DI). I hope you enjoy it!</em></p>
 
 <h2>What is testable software?</h2>
 
@@ -28,11 +28,11 @@
 
 <h2>So what is Dependency Injection?</h2>
 
-<p>As the name suggests, it is a technique that injects the dependencies. Without a real context this probably sounds a bit weird, so imagine a class that uses a network connection. Instead of only having the network connection internally, it is probably better to give it when creating an instance of the class. I.e. inject the network connection or preferably inject an interface that can be implemented as a network connection. I wrote &#8220;probably&#8221; because it is of course not always correct to inject everything. This is no silver bullet either.</p>
+<p>As the name suggests, it is a technique that injects the dependencies. Without a real context this probably sounds a bit weird, so imagine a class that uses a network connection. Instead of only having the network connection internally, it is probably better to give it when creating an instance of the class. I.e. inject the network connection or preferably inject an interface that can be implemented as a network connection. I wrote &ldquo;probably&rdquo; because it is of course not always correct to inject everything. This is no silver bullet either.</p>
 
 <h2>Example in C++ with virtual interface</h2>
 
-<p>Let&#8217;s look at an example in C++ how it could look like when we break a dependency using DI. First, an example where a class uses a network connection internally to send some data.</p>
+<p>Let&rsquo;s look at an example in C++ how it could look like when we break a dependency using DI. First, an example where a class uses a network connection internally to send some data.</p>
 
 <pre><code>class Client
 {
@@ -90,7 +90,7 @@ private:
 
 <p>What we essentially have done is to instead of using a concrete class we now use an interface which means it can be exchanged for anything as long as it implements that interface. This is what we want, because then we can have one class that is the real network connection that we use for production code, and another class that we use in unit tests to not involve the network when testing the client itself. This is in line with good software design as well.</p>
 
-<p>It is important to note that this is not always the wanted solution as there are other ways to achieve similar results. Let&#8217;s look at an alternative.</p>
+<p>It is important to note that this is not always the wanted solution as there are other ways to achieve similar results. Let&rsquo;s look at an alternative.</p>
 
 <h2>Example in C++ with a template</h2>
 
@@ -133,7 +133,7 @@ private:
 
 <h2>What is the bottom line?</h2>
 
-<p>To me, DI is simply another tool that can be used when it makes sense. In my view, it does not make sense to inject everything just because it&#8217;s possible. What does make sense to do every time is to write testable code and write unit tests to test it. This is part of the foundation of good quality.</p>
+<p>To me, DI is simply another tool that can be used when it makes sense. In my view, it does not make sense to inject everything just because it&rsquo;s possible. What does make sense to do every time is to write testable code and write unit tests to test it. This is part of the foundation of good quality.</p>
 
 <p>DI is a concept that can be used across programming languages and here I have showed you how it can be used in C++. I hope you enjoyed the post!</p>
 ]]></content>
@@ -148,19 +148,19 @@ private:
 
 <h2>How to approach a new bug?</h2>
 
-<p>When confronted with a new bug the goal is often simplified to only finding a fix. This is of course important, but it&#8217;s not enough. Equally important is to prevent the bug from happening again and also to not break anything else while fixing this one. To achieve the latter two, we need to rely on unit testing. First, the new bug needs to get unit tests that catch it so it becomes visible when it happens again. Second, to avoid breaking other things we need to have enough unit tests to be comfortable making changes to the code base so we can fix the bug we&#8217;re working with.</p>
+<p>When confronted with a new bug the goal is often simplified to only finding a fix. This is of course important, but it&rsquo;s not enough. Equally important is to prevent the bug from happening again and also to not break anything else while fixing this one. To achieve the latter two, we need to rely on unit testing. First, the new bug needs to get unit tests that catch it so it becomes visible when it happens again. Second, to avoid breaking other things we need to have enough unit tests to be comfortable making changes to the code base so we can fix the bug we&rsquo;re working with.</p>
 
 <h2>What is the best workflow?</h2>
 
-<p>There are many ways one can work and below is a way I have found to work extremely well. It takes some discipline but it&#8217;s a clear and straight-forward way.</p>
+<p>There are many ways one can work and below is a way I have found to work extremely well. It takes some discipline but it&rsquo;s a clear and straight-forward way.</p>
 
 <h3>Reproduce the bug</h3>
 
-<p>In order to properly understand and fix a bug one needs to reproduce it and see how the software fails. This is not always possible and in the worst case one cannot understand what the problem really is or what triggers it. Let&#8217;s focus on the ones that can be reproduced and fixed.</p>
+<p>In order to properly understand and fix a bug one needs to reproduce it and see how the software fails. This is not always possible and in the worst case one cannot understand what the problem really is or what triggers it. Let&rsquo;s focus on the ones that can be reproduced and fixed.</p>
 
 <h3>Use CI builds to track down when the bug was introduced</h3>
 
-<p>Again, the Continuous Integration system can show its powers, because now we can use old builds to quickly find the first build that introduced this problem (assuming it&#8217;s something that has been working at some point of course). If we find the last build where it works we can check what was changed in the following build looking at the change list. This I have found to be a very effective way of finding the introduction and to understand what parts of the code to look at. This basically means going back in time to when the bug was introduced.</p>
+<p>Again, the Continuous Integration system can show its powers, because now we can use old builds to quickly find the first build that introduced this problem (assuming it&rsquo;s something that has been working at some point of course). If we find the last build where it works we can check what was changed in the following build looking at the change list. This I have found to be a very effective way of finding the introduction and to understand what parts of the code to look at. This basically means going back in time to when the bug was introduced.</p>
 
 <h3>Add tests to catch the bug</h3>
 
@@ -178,7 +178,7 @@ private:
 
 <h3>Next part</h3>
 
-<p><em>In the next part I&#8217;ll write about dependency injection which is a very powerful technique to break dependencies and thus get testable code. I hope you enjoyed this one!</em></p>
+<p><em>In the next part I&rsquo;ll write about dependency injection which is a very powerful technique to break dependencies and thus get testable code. I hope you enjoyed this one!</em></p>
 ]]></content>
   </entry>
   
@@ -187,7 +187,7 @@ private:
     <link href="http://murrekatt.github.com/blog/2013/10/23/unit-testing-part-2/"/>
     <updated>2013-10-23T20:58:00+02:00</updated>
     <id>http://murrekatt.github.com/blog/2013/10/23/unit-testing-part-2</id>
-    <content type="html"><![CDATA[<p><em>There are many related topics that come up when talking about unit testing. One of the most important ones in my mind is Continuous Integration. In this post I&#8217;ll explain how I see Continuous Integration and its relationship with unit testing.</em></p>
+    <content type="html"><![CDATA[<p><em>There are many related topics that come up when talking about unit testing. One of the most important ones in my mind is Continuous Integration. In this post I&rsquo;ll explain how I see Continuous Integration and its relationship with unit testing.</em></p>
 
 <h2>What is Continuous Integration?</h2>
 
@@ -201,11 +201,11 @@ private:
 
 <p>Unit tests are part of the quality assurance mechanism and are run in order to make sure that the code changes are not breaking things. This is what unit testing automation is all about and this is a key ingredient of a good CI implementation.</p>
 
-<p>In order to have a sound CI system with automated unit tests, there are a few key things to consider. Let&#8217;s look at the ones I consider most important.</p>
+<p>In order to have a sound CI system with automated unit tests, there are a few key things to consider. Let&rsquo;s look at the ones I consider most important.</p>
 
 <h3>There must be enough unit test coverage</h3>
 
-<p>It&#8217;s clear that one have to start from zero unit tests at some point and it&#8217;s preferable if this is when there is zero source code as well. Adding unit tests after the fact is usually very slow and hard, so keep them with from the start. They are not only there to prove that things work but also to help while doing the development work.</p>
+<p>It&rsquo;s clear that one have to start from zero unit tests at some point and it&rsquo;s preferable if this is when there is zero source code as well. Adding unit tests after the fact is usually very slow and hard, so keep them with from the start. They are not only there to prove that things work but also to help while doing the development work.</p>
 
 <h3>The unit tests must be fast</h3>
 
@@ -223,13 +223,13 @@ private:
 
 <h2>Why is Continuous Integration so great?</h2>
 
-<p>The main thing about CI is that it&#8217;s a platform, a framework or simply a process that can take any shape one needs in order to get fast feedback to changes one is making while developing software. It sits in the venter of software development and can be hooked into other systems like source control and issue tracking systems to extend the automation of the software development process.</p>
+<p>The main thing about CI is that it&rsquo;s a platform, a framework or simply a process that can take any shape one needs in order to get fast feedback to changes one is making while developing software. It sits in the venter of software development and can be hooked into other systems like source control and issue tracking systems to extend the automation of the software development process.</p>
 
-<p>Put even simpler - it is the platform for automation which is a very powerful thing.</p>
+<p>Put even simpler &ndash; it is the platform for automation which is a very powerful thing.</p>
 
 <h3>Next part</h3>
 
-<p><em>In the next part I&#8217;ll write about bug fixing and unit tests. I hope you enjoyed this one!</em></p>
+<p><em>In the next part I&rsquo;ll write about bug fixing and unit tests. I hope you enjoyed this one!</em></p>
 ]]></content>
   </entry>
   
@@ -238,13 +238,13 @@ private:
     <link href="http://murrekatt.github.com/blog/2013/09/29/unit-testing-part-1/"/>
     <updated>2013-09-29T17:00:00+02:00</updated>
     <id>http://murrekatt.github.com/blog/2013/09/29/unit-testing-part-1</id>
-    <content type="html"><![CDATA[<p><em>There exists lots of great information and books about unit testing and I&#8217;m not trying to re-invent that or necessarily come with anything new. This is more of a distilled version preliminary for myself how I think and go about unit testing and what I have found to work well. If someone else finds it useful, even better!</em></p>
+    <content type="html"><![CDATA[<p><em>There exists lots of great information and books about unit testing and I&rsquo;m not trying to re-invent that or necessarily come with anything new. This is more of a distilled version preliminary for myself how I think and go about unit testing and what I have found to work well. If someone else finds it useful, even better!</em></p>
 
 <h2>What is unit testing really?</h2>
 
-<p>Unit testing is about writing code that tests e.g. classes and functions as you&#8217;re developing software to check that things work as expected. Hence, this activity is <strong>something software engineers do themselves</strong> and not something other people do after code has been written! This realization is fundamental and important. Think of unit tests as a safety net for us programmers so that we don&#8217;t break things. It&#8217;s also important to understand that unit tests are for small things, generically called units. Unit tests are not aimed at testing functionality across several parts or features in a system. They&#8217;re about making sure that the building blocks are delivering what they promise so one can integrate them into larger software systems. Other types of testing targets other testing needs such as functional-, integration- as well as performance testing. These are all important and it&#8217;s crucial to understand and keep them separate.</p>
+<p>Unit testing is about writing code that tests e.g. classes and functions as you&rsquo;re developing software to check that things work as expected. Hence, this activity is <strong>something software engineers do themselves</strong> and not something other people do after code has been written! This realization is fundamental and important. Think of unit tests as a safety net for us programmers so that we don&rsquo;t break things. It&rsquo;s also important to understand that unit tests are for small things, generically called units. Unit tests are not aimed at testing functionality across several parts or features in a system. They&rsquo;re about making sure that the building blocks are delivering what they promise so one can integrate them into larger software systems. Other types of testing targets other testing needs such as functional-, integration- as well as performance testing. These are all important and it&rsquo;s crucial to understand and keep them separate.</p>
 
-<p>Other important properties of unit tests are determinism, independency and speed. The first means that a test behaves in a deterministic manner and not random. Independency means that there are no external dependencies like database, network or disk. It&#8217;s key to have very fast tests that are isolated and deterministic so that all tests can be run anytime you want, e.g. after any code change. Typically fast in this context means seconds to minutes and the number of tests means thousands or more.</p>
+<p>Other important properties of unit tests are determinism, independency and speed. The first means that a test behaves in a deterministic manner and not random. Independency means that there are no external dependencies like database, network or disk. It&rsquo;s key to have very fast tests that are isolated and deterministic so that all tests can be run anytime you want, e.g. after any code change. Typically fast in this context means seconds to minutes and the number of tests means thousands or more.</p>
 
 <p>Unit tests have more to them than only testing the integrity of the code, they also function as a specification of what something should do and how it should work. They show how to use specific classes and functions and this help newcomers as well as others to understand a code base or an API.</p>
 
@@ -252,7 +252,7 @@ private:
 
 <h2>What does a good unit test look like?</h2>
 
-<p>There are several ways to write good unit tests and here is what I have found to work very well for me in C++. Let&#8217;s look at the following example test case.</p>
+<p>There are several ways to write good unit tests and here is what I have found to work very well for me in C++. Let&rsquo;s look at the following example test case.</p>
 
 <pre><code>TEST(Client, successfully_connects)
 {
@@ -265,15 +265,15 @@ private:
 }
 </code></pre>
 
-<p>Firstly, it&#8217;s very important to read the test case clearly and immediately understand what it means and what to expect. My preferred way for test name is to write it in lowercase with underscores to delimit the words. This is much clearer than UpperCamelCase. It&#8217;s important to name it according to what it&#8217;s doing and what to expect so everyone clearly understands.</p>
+<p>Firstly, it&rsquo;s very important to read the test case clearly and immediately understand what it means and what to expect. My preferred way for test name is to write it in lowercase with underscores to delimit the words. This is much clearer than UpperCamelCase. It&rsquo;s important to name it according to what it&rsquo;s doing and what to expect so everyone clearly understands.</p>
 
-<p>Secondly, I prefer to use <em>AAA</em>, that is, <em>Arrange</em>, <em>Act</em> and <em>Assert</em> to divide the test into clear parts. I don&#8217;t aim to be dogmatic, but this works well most of the time. The first part arranges the necessary start (closely related to a fixture), the second part does the action, and the last part asserts what the test tests. This keeps the tests short, simple and clear. I find this providing a clear structure so anyone will understand the test and it restricts the tester to keep things short and focused. Many times I have seen single tests testing multiple things over multiple screens. This is not what you want! You want to have the user understand what the preconditions are i.e. the start and then understand what happens when you do &#8220;one thing&#8221;. That&#8217;s it. Keep it simple is the key to success here as well.</p>
+<p>Secondly, I prefer to use <em>AAA</em>, that is, <em>Arrange</em>, <em>Act</em> and <em>Assert</em> to divide the test into clear parts. I don&rsquo;t aim to be dogmatic, but this works well most of the time. The first part arranges the necessary start (closely related to a fixture), the second part does the action, and the last part asserts what the test tests. This keeps the tests short, simple and clear. I find this providing a clear structure so anyone will understand the test and it restricts the tester to keep things short and focused. Many times I have seen single tests testing multiple things over multiple screens. This is not what you want! You want to have the user understand what the preconditions are i.e. the start and then understand what happens when you do &ldquo;one thing&rdquo;. That&rsquo;s it. Keep it simple is the key to success here as well.</p>
 
 <h2>How to use fixtures to be DRY?</h2>
 
-<p>To keep things clean and clear it&#8217;s important to not clutter and repeat things. This is where fixtures enter the stage. I primarily think of a fixture as the preconditions that is the starting point for the test. They are about setting up state and tearing it down after the test.</p>
+<p>To keep things clean and clear it&rsquo;s important to not clutter and repeat things. This is where fixtures enter the stage. I primarily think of a fixture as the preconditions that is the starting point for the test. They are about setting up state and tearing it down after the test.</p>
 
-<p>For the previous test case example, we only have a starting point of the creating the client, so it doesn&#8217;t give much immediate simplification, however, for larger number of tests this is very powerful. Let&#8217;s take a look at what it would look like with a fixture.</p>
+<p>For the previous test case example, we only have a starting point of the creating the client, so it doesn&rsquo;t give much immediate simplification, however, for larger number of tests this is very powerful. Let&rsquo;s take a look at what it would look like with a fixture.</p>
 
 <pre><code>namespace
 {
@@ -293,7 +293,7 @@ TEST_F(ClientFixture, successfully_connects)
 }
 </code></pre>
 
-<p><em>As a side note, in C++ in .cpp files it&#8217;s good practice to put code like the fixture into an anonymous namespace, because it should only be accessible in this compilation unit. If it&#8217;s not put in an anonymous namespace it will cause linker errors if the same fixture name is also elsewhere. So, put it into the anonymous namespace.</em></p>
+<p><em>As a side note, in C++ in .cpp files it&rsquo;s good practice to put code like the fixture into an anonymous namespace, because it should only be accessible in this compilation unit. If it&rsquo;s not put in an anonymous namespace it will cause linker errors if the same fixture name is also elsewhere. So, put it into the anonymous namespace.</em></p>
 
 <p>With the fixture we can now easily add another test that uses the same fixture and thus saves us in this trivial example the code under arrange that created the client. This is now implicitly available through the fixture.</p>
 
@@ -317,7 +317,7 @@ TEST_F(ClientFixture, successfully_connects)
 
 <h3>Next part</h3>
 
-<p><em>There are several related topics to unit testing like Continuous Integration, bug fixing, TDD and more. I&#8217;ll cover these in later parts about unit testing. I hope you enjoyed it!</em></p>
+<p><em>There are several related topics to unit testing like Continuous Integration, bug fixing, TDD and more. I&rsquo;ll cover these in later parts about unit testing. I hope you enjoyed it!</em></p>
 ]]></content>
   </entry>
   
@@ -326,13 +326,13 @@ TEST_F(ClientFixture, successfully_connects)
     <link href="http://murrekatt.github.com/blog/2012/12/13/light-weight-header-only-c-plus-plus-unit-testing-framework/"/>
     <updated>2012-12-13T19:30:00+01:00</updated>
     <id>http://murrekatt.github.com/blog/2012/12/13/light-weight-header-only-c-plus-plus-unit-testing-framework</id>
-    <content type="html"><![CDATA[<p>Unit testing is something I care about a lot and I&#8217;ve come to realize the enormous benefits it brings when you want to refactor and make changes to software. This is something I do a lot, because I like to evolve things and thus have a basis where I can make changes and at the same time feel confident that it still works. Another very important aspect of unit tests is that you can communicate how something is expected to work, i.e. the specification, both to yourself and also to others. This is very important and powerful.</p>
+    <content type="html"><![CDATA[<p>Unit testing is something I care about a lot and I&rsquo;ve come to realize the enormous benefits it brings when you want to refactor and make changes to software. This is something I do a lot, because I like to evolve things and thus have a basis where I can make changes and at the same time feel confident that it still works. Another very important aspect of unit tests is that you can communicate how something is expected to work, i.e. the specification, both to yourself and also to others. This is very important and powerful.</p>
 
-<p>Currently, my main programming language is C++ and I&#8217;m using <a href="https://code.google.com/p/googletest/">Google test</a> to write and run unit tests. This is a great framework and I&#8217;m very happy with it. However, as an interesting exercise I decided to developed a small and light-weight unit testing framework that would work similarly to Google test, i.e. similar macros and so forth. My goal was to write a header-only test framework that has the most important features needed for unit testing. Also it should integrate with Continuous Integration systems like Hudson/Jenkins, i.e. the XML output must be readable by Hudson/Jenkins.</p>
+<p>Currently, my main programming language is C++ and I&rsquo;m using <a href="https://code.google.com/p/googletest/">Google test</a> to write and run unit tests. This is a great framework and I&rsquo;m very happy with it. However, as an interesting exercise I decided to developed a small and light-weight unit testing framework that would work similarly to Google test, i.e. similar macros and so forth. My goal was to write a header-only test framework that has the most important features needed for unit testing. Also it should integrate with Continuous Integration systems like Hudson/Jenkins, i.e. the XML output must be readable by Hudson/Jenkins.</p>
 
-<p>I&#8217;ve completed an initial version I&#8217;m using in a few toy projects and I thought it could be nice to share it in case someone else might find it useful. It&#8217;s <a href="https://github.com/murrekatt/cpput">available for download on github</a>, so please have a look and let me know what you think.</p>
+<p>I&rsquo;ve completed an initial version I&rsquo;m using in a few toy projects and I thought it could be nice to share it in case someone else might find it useful. It&rsquo;s <a href="https://github.com/murrekatt/cpput">available for download on github</a>, so please have a look and let me know what you think.</p>
 
-<p>In coming posts I&#8217;ll describe how to use it and what my preferences when it comes to unit testing.</p>
+<p>In coming posts I&rsquo;ll describe how to use it and what my preferences when it comes to unit testing.</p>
 ]]></content>
   </entry>
   
@@ -341,7 +341,7 @@ TEST_F(ClientFixture, successfully_connects)
     <link href="http://murrekatt.github.com/blog/2012/12/02/first-post/"/>
     <updated>2012-12-02T16:44:00+01:00</updated>
     <id>http://murrekatt.github.com/blog/2012/12/02/first-post</id>
-    <content type="html"><![CDATA[<p>So, finally I&#8217;ve decided to start collecting and sharing some things I&#8217;ve come across that I think others might benefit from. Primarily it&#8217;ll function as a notebook to myself about various topics. Hope you&#8217;ll enjoy it!</p>
+    <content type="html"><![CDATA[<p>So, finally I&rsquo;ve decided to start collecting and sharing some things I&rsquo;ve come across that I think others might benefit from. Primarily it&rsquo;ll function as a notebook to myself about various topics. Hope you&rsquo;ll enjoy it!</p>
 ]]></content>
   </entry>
   
