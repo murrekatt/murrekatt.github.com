@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: git | Tommy Back]]></title>
+  <link href="http://murrekatt.github.com/blog/categories/git/atom.xml" rel="self"/>
+  <link href="http://murrekatt.github.com/"/>
+  <updated>2014-10-24T07:56:35+02:00</updated>
+  <id>http://murrekatt.github.com/</id>
+  <author>
+    <name><![CDATA[Tommy Back]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Git Workflow Overview]]></title>
+    <link href="http://murrekatt.github.com/blog/2014/10/24/git-workflow-overview/"/>
+    <updated>2014-10-24T07:43:00+02:00</updated>
+    <id>http://murrekatt.github.com/blog/2014/10/24/git-workflow-overview</id>
+    <content type="html"><![CDATA[<p>Short overview of the most important git commands and workflows. This is mainly
+focused on projects on Github.</p>
+
+<h2>Forking, Cloning and Remotes</h2>
+
+<p>Git allows you to work in several different ways. Two good ways to work are
+direct push and pull requests. The former is often used when you are alone
+or when you work on your own repo (which can be either a fork or not). The
+latter is usually the way to work in an open-source project so that people
+send pull requests for changes from their own forks of some repo.</p>
+
+<p>To get started, let&rsquo;s get a local repo by cloning say your fork of another
+repo you&rsquo;d like to contribute to.</p>
+
+<pre><code>git clone &lt;repo_url&gt;
+</code></pre>
+
+<p>After this you have a local repo and a remote repo on Github. The repo repo
+is called <code>origin</code>. This is where you push changes.</p>
+
+<p>If you forked an upstream repo, you should also add a remote <code>upstream</code> so
+that you can easily fetch and rebase.</p>
+
+<pre><code>git remote add upstream &lt;upstream_repo_url&gt;
+git fetch upstream
+</code></pre>
+
+<p>If you collaborate with others it might as well be good to add their repos
+as remotes too so that you can grab changes from there and rebase on top of
+changes not yet upstream.</p>
+
+<h2>Making Changes</h2>
+
+<p>Changes to the code base should be done in clear and well described steps
+that are put into separate commits. I.e. a larger change will consist of a
+number of commits describing various parts on the way towards the change is
+completed.</p>
+
+<p>A good workflow is to create a separate branch for some changes you&rsquo;re making.
+This way you can easily work on multiple things in parallel and have good
+isolation between things. To create a new branch you start from a commit hash
+you want to use as the starting-point (usually this is HEAD of master).</p>
+
+<pre><code>git checkout -b some_descriptive_name
+</code></pre>
+
+<p>Now you&rsquo;re in <code>some_descriptive_name</code> and it&rsquo;s identical to where you where
+when you issued the checkout-branch command.</p>
+
+<p>Now, let&rsquo;s say you edited a files <code>Example.cpp</code> and <code>Example.hpp</code> adding a new
+function <code>get_number()</code>. Now you want to add the change into a commit and
+this is done by adding the files like this:</p>
+
+<pre><code>git add Example.cpp Example.hpp
+</code></pre>
+
+<p>After this add the change into a commit:</p>
+
+<pre><code>git commit -m 'Added function get_number() into Example.'
+</code></pre>
+
+<p>This procedure is repeated for a collection of changes (commits) until you&rsquo;re
+ready to send a pull request. Before you can send a pull request you need to
+push your changes to your remote repo called <code>origin</code>:</p>
+
+<pre><code>git push origin &lt;branch_name&gt;
+</code></pre>
+
+<h2>Creating a Pull Request</h2>
+
+<p>When you have a set of changes that you&rsquo;d like to send upstream you do that by
+sending a pull request. This means that you submit your branch and the included
+changes to the upstream repo so that a maintainer can merge it.</p>
+
+<p>Sending a pull request is done on Github from your own fork. Select the branch
+you are on and then click create pull request.</p>
+
+<p>Once this is created it will go through review by whoever is a maintainer of the
+upstream repo.</p>
+
+<h2>Rebasing a Pull Request</h2>
+
+<p>One way of working is to rebase every pull request before it gets merged. This
+results in a clean commit history. When this is the process, you&rsquo;ll need to
+fetch any changes that were merged upstream and rebase on top of those.</p>
+
+<pre><code>git fetch upstream
+git rebase upstream/&lt;branch&gt;
+</code></pre>
+
+<p>This will catch up the current branch you are in with all changes upstream that
+you fetched and then replay your local changes on top of that. If you want you
+can automatically change pull to be fetch+rebase like this:</p>
+
+<pre><code>git config --global branch.autosetuprebase always
+</code></pre>
+
+<p>and then retroactively add it to existing branches like this:</p>
+
+<pre><code>git config branch.&lt;branch_name&gt;.rebase true
+</code></pre>
+
+<p>To update your pending pull request you need to update <code>origin</code> with your
+rebased branch. To do this you need to force push</p>
+
+<pre><code>git push +HEAD:&lt;branch&gt;
+</code></pre>
+
+<p>This will automatically update the pending pull request on Github to include
+your updated commits.</p>
+
+<p><strong>NOTE:</strong> force push rewrites history of your <code>origin</code> so be very careful with
+using it to not lose commits.</p>
+
+<h2>Resolving Conflicts when Rebasing</h2>
+
+<p>Sometimes when you rebase there are changes that conflict with yours and then
+git will stop and prompt you to make a choice what to do. In many cases there
+is an automatic merge, but if this fails you need to resolve the conflicts
+manually.</p>
+
+<p>To do this you can start by looking at the files that have conflicts:</p>
+
+<pre><code>git status
+</code></pre>
+
+<p>This lists files that you need to update. I.e. one by one you open the files
+and look for e.g. HEAD to see where there&rsquo;s something you need to address. When
+you have made the updates you need to add the files and continue with the
+rebase like this:</p>
+
+<pre><code>git add FileThatHadConflict.cpp
+git rebase --continue
+</code></pre>
+
+<p>You might need to do this procedure multiple times depending on the conflicts
+and number of commits you have etc.</p>
+
+<h2>Interactive Rebase and Amending a Commit</h2>
+
+<p>During review of your pull request there might be things that need to be
+changed in a commit. There are two ways of dealing with this:</p>
+
+<ul>
+<li>add a new commit to change things.</li>
+<li>amend an existing commit.</li>
+</ul>
+
+
+<p>The second option is cleaner, so let&rsquo;s look at this.</p>
+
+<p>First you&rsquo;ll need to fetch latest upstream and rebase on that.</p>
+
+<pre><code>git fetch upstream
+git rebase upstream/&lt;branch&gt;
+</code></pre>
+
+<p>Then you need to do an interactive rebase so that you can mark the commits
+you want to edit so that you can make changes directlyinto those.</p>
+
+<pre><code>git rebase -i upstream/&lt;branch&gt;
+</code></pre>
+
+<p>To edit change <code>pick</code> to <code>e</code> for one or more commits. Save and exit. Git will
+replay and stop at the marked commits so that you can make changes. So just
+make the change and then amend and continue rebase like this:</p>
+
+<pre><code>git add FileThatWasAmended.cpp
+git commit --amend
+# save commit info
+git rebase --continue
+</code></pre>
+
+<p>Once you have done all you&rsquo;re ready to force push the changes to your pull
+request.</p>
+
+<pre><code>git push origin +HEAD:&lt;branch&gt;
+</code></pre>
+
+<p>If you for some reason what to abort the rebase you can do:</p>
+
+<pre><code>git rebase --abort
+</code></pre>
+
+<h2>Rebasing On Top of Another Branch</h2>
+
+<p>When you&rsquo;re collaborating with others it might many times be good to share
+code before it hits upstream. This is easily done with git because upstream
+is just like any other repo. For convenience, add a remote to the repo you
+want to collaborate with like this:</p>
+
+<pre><code>git remote add foo &lt;foo_repo_url&gt;
+git fetch foo
+</code></pre>
+
+<p>Now you can see foo&rsquo;s branches with:</p>
+
+<pre><code>git branch -v
+</code></pre>
+
+<p>And getting code from someone is as easy as fetching and rebasing on top of
+upstream:</p>
+
+<pre><code>git rebase foo/some_branch
+</code></pre>
+
+<p>The same is true for pull requests. You can send pull requests between forks
+in Github too.</p>
+
+<h2>Some Other Useful Commands</h2>
+
+<p>To force HEAD to something in case of some major mistake you can do:</p>
+
+<pre><code>git reset --hard &lt;commit_hash&gt;
+</code></pre>
+
+<p><strong>NOTE:</strong> be very careful with this command so you don&rsquo;t lose anything.</p>
+
+<h2>Useful Links</h2>
+
+<ul>
+<li><a href="https://github.com/edx/edx-platform/wiki/How-to-Rebase-a-Pull-Request">How To Rebase a Pull Request</a></li>
+<li><a href="http://mark-dot-net.blogspot.ch/2012/02/to-rebase-or-not-to-rebase-that-is.html">Rebase vs. Merge</a></li>
+<li><a href="http://codeinthehole.com/writing/pull-requests-and-other-good-practices-for-teams-using-github/">Pull Requests and Other Good Practices</a></li>
+<li><a href="http://sarah.thesharps.us/2014/09/01/the-gentle-art-of-patch-review/">Three Phase Review Process</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>
