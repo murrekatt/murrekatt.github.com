@@ -4,7 +4,7 @@
   <title><![CDATA[Category: git | Tommy Back]]></title>
   <link href="http://murrekatt.github.com/blog/categories/git/atom.xml" rel="self"/>
   <link href="http://murrekatt.github.com/"/>
-  <updated>2014-10-24T07:56:35+02:00</updated>
+  <updated>2014-10-26T19:02:11+01:00</updated>
   <id>http://murrekatt.github.com/</id>
   <author>
     <name><![CDATA[Tommy Back]]></name>
@@ -12,6 +12,114 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Custom Git Prompt]]></title>
+    <link href="http://murrekatt.github.com/blog/2014/10/26/custom-git-prompt/"/>
+    <updated>2014-10-26T12:08:00+01:00</updated>
+    <id>http://murrekatt.github.com/blog/2014/10/26/custom-git-prompt</id>
+    <content type="html"><![CDATA[<p>As an additional bonus to the previous
+<a href="http://tommyback.com/blog/2014/10/24/git-workflow-overview/">post about Git workflows</a>
+I&rsquo;ll show how to customize the shell prompt to give you useful information. I
+have used <a href="http://bytebaker.com/2012/01/09/show-git-information-in-your-prompt/">this</a>
+version as a starting-point with some additional fixes and improvements.</p>
+
+<p>For me it&rsquo;s always useful to immediately see what branch I am on, if there
+are local changes and how many commits I haven&rsquo;t yet pushed. To show all this
+information in a compat way I have decided on the following:</p>
+
+<pre><code>current_dir + ' ' + branch_name + [*] + ['(' + 3 + ')'] + ' $ '
+</code></pre>
+
+<p>First comes the current dir and then the branch name. Then optionally an asterix
+for local uncommitted changes and lastly an optional number of unpushed commits.</p>
+
+<p>Let&rsquo;s dive in and see how to build this step by step. Each part of the prompt
+is got with a function &ndash; first our is the branch name.</p>
+
+<p>``` bash
+function git-branch-name
+{</p>
+
+<pre><code>echo $(git branch | grep "^\*" | awk -F* {'print $NF'})
+</code></pre>
+
+<p>}
+```</p>
+
+<p>The second piece is to check whether there are local changes that are not
+committed.</p>
+
+<p>``` bash
+function git-dirty {</p>
+
+<pre><code>st=$(git status 2&gt;/dev/null | tail -1)
+if [[ $st != "nothing to commit, working directory clean" ]] ; then
+    echo "*"
+fi
+</code></pre>
+
+<p>}
+```</p>
+
+<p>Then let&rsquo;s see how many commits we are ahead locally and grab the number.</p>
+
+<p>``` bash
+function git-unpushed {</p>
+
+<pre><code>brinfo=$(git status | grep ahead)
+if [[ $brinfo =~ ([0-9]+)[[:space:]]commit ]] ; then
+    echo "(${BASH_REMATCH[1]})"
+fi
+</code></pre>
+
+<p>}
+```</p>
+
+<p>The next part detects if we&rsquo;re in a git repo and then gitifies the prompt.</p>
+
+<p>``` bash
+function gitify {</p>
+
+<pre><code>git rev-parse --git-dir &gt; /dev/null 2&gt;&amp;1
+if [[ $? != 0 ]] ; then
+    echo ""
+else
+    echo $(git-branch-name)$(git-dirty)$(git-unpushed)
+fi
+</code></pre>
+
+<p>}
+```</p>
+
+<p>The last function constructs the prompt and add colors for nice visibility.</p>
+
+<p>``` bash
+function make-prompt
+{</p>
+
+<pre><code>local RED="\[\e[0;31m\]"
+local GREEN="\[\e[0;32m\]"
+local LIGHT_GRAY="\[\e[0;37m\]"
+local CYAN="\[\e[0;36m\]"
+
+PS1="\
+</code></pre>
+
+<p>${GREEN} \W\
+${RED} \$(gitify)\
+${GREEN}\
+${LIGHT_GRAY} $ "</p>
+
+<p>}</p>
+
+<p>make-prompt
+```</p>
+
+<p>I&rsquo;ve added all the above into a file called <code>.bash_prompt</code> that get sourced from
+<code>.bashrc</code>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Git Workflow Overview]]></title>

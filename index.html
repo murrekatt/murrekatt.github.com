@@ -9,8 +9,9 @@
   <meta name="author" content="Tommy Back">
 
   
-  <meta name="description" content="Short overview of the most important git commands and workflows. This is mainly
-focused on projects on Github. Forking, Cloning and Remotes Git &hellip;">
+  <meta name="description" content="As an additional bonus to the previous
+post about Git workflows
+I&rsquo;ll show how to customize the shell prompt to give you useful information. I &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +66,166 @@ focused on projects on Github. Forking, Cloning and Remotes Git &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/10/26/custom-git-prompt/">Custom Git Prompt</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-10-26T12:08:00+01:00" pubdate data-updated="true">Oct 26<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>As an additional bonus to the previous
+<a href="http://tommyback.com/blog/2014/10/24/git-workflow-overview/">post about Git workflows</a>
+I&rsquo;ll show how to customize the shell prompt to give you useful information. I
+have used <a href="http://bytebaker.com/2012/01/09/show-git-information-in-your-prompt/">this</a>
+version as a starting-point with some additional fixes and improvements.</p>
+
+<p>For me it&rsquo;s always useful to immediately see what branch I am on, if there
+are local changes and how many commits I haven&rsquo;t yet pushed. To show all this
+information in a compat way I have decided on the following:</p>
+
+<pre><code>current_dir + ' ' + branch_name + [*] + ['(' + 3 + ')'] + ' $ '
+</code></pre>
+
+<p>First comes the current dir and then the branch name. Then optionally an asterix
+for local uncommitted changes and lastly an optional number of unpushed commits.</p>
+
+<p>Let&rsquo;s dive in and see how to build this step by step. Each part of the prompt
+is got with a function &ndash; first our is the branch name.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="k">function </span>git-branch-name
+</span><span class='line'><span class="o">{</span>
+</span><span class='line'>    <span class="nb">echo</span> <span class="k">$(</span>git branch | grep <span class="s2">&quot;^\*&quot;</span> | awk -F* <span class="o">{</span><span class="s1">&#39;print $NF&#39;</span><span class="o">}</span><span class="k">)</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The second piece is to check whether there are local changes that are not
+committed.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="k">function </span>git-dirty <span class="o">{</span>
+</span><span class='line'>    <span class="nv">st</span><span class="o">=</span><span class="k">$(</span>git status 2&gt;/dev/null | tail -1<span class="k">)</span>
+</span><span class='line'>    <span class="k">if</span> <span class="o">[[</span> <span class="nv">$st</span> !<span class="o">=</span> <span class="s2">&quot;nothing to commit, working directory clean&quot;</span> <span class="o">]]</span> ; <span class="k">then</span>
+</span><span class='line'><span class="k">        </span><span class="nb">echo</span> <span class="s2">&quot;*&quot;</span>
+</span><span class='line'>    <span class="k">fi</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then let&rsquo;s see how many commits we are ahead locally and grab the number.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="k">function </span>git-unpushed <span class="o">{</span>
+</span><span class='line'>    <span class="nv">brinfo</span><span class="o">=</span><span class="k">$(</span>git status | grep ahead<span class="k">)</span>
+</span><span class='line'>    <span class="k">if</span> <span class="o">[[</span> <span class="nv">$brinfo</span> <span class="o">=</span>~ <span class="o">([</span>0-9<span class="o">]</span>+<span class="o">)[[</span>:space:<span class="o">]]</span>commit <span class="o">]]</span> ; <span class="k">then</span>
+</span><span class='line'><span class="k">        </span><span class="nb">echo</span> <span class="s2">&quot;(${BASH_REMATCH[1]})&quot;</span>
+</span><span class='line'>    <span class="k">fi</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The next part detects if we&rsquo;re in a git repo and then gitifies the prompt.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="k">function </span>gitify <span class="o">{</span>
+</span><span class='line'>    git rev-parse --git-dir &gt; /dev/null 2&gt;&amp;1
+</span><span class='line'>    <span class="k">if</span> <span class="o">[[</span> <span class="nv">$?</span> !<span class="o">=</span> 0 <span class="o">]]</span> ; <span class="k">then</span>
+</span><span class='line'><span class="k">        </span><span class="nb">echo</span> <span class="s2">&quot;&quot;</span>
+</span><span class='line'>    <span class="k">else</span>
+</span><span class='line'><span class="k">        </span><span class="nb">echo</span> <span class="k">$(</span>git-branch-name<span class="k">)$(</span>git-dirty<span class="k">)$(</span>git-unpushed<span class="k">)</span>
+</span><span class='line'>    <span class="k">fi</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The last function constructs the prompt and add colors for nice visibility.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="k">function </span>make-prompt
+</span><span class='line'><span class="o">{</span>
+</span><span class='line'>    <span class="nb">local </span><span class="nv">RED</span><span class="o">=</span><span class="s2">&quot;\[\e[0;31m\]&quot;</span>
+</span><span class='line'>    <span class="nb">local </span><span class="nv">GREEN</span><span class="o">=</span><span class="s2">&quot;\[\e[0;32m\]&quot;</span>
+</span><span class='line'>    <span class="nb">local </span><span class="nv">LIGHT_GRAY</span><span class="o">=</span><span class="s2">&quot;\[\e[0;37m\]&quot;</span>
+</span><span class='line'>    <span class="nb">local </span><span class="nv">CYAN</span><span class="o">=</span><span class="s2">&quot;\[\e[0;36m\]&quot;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nv">PS1</span><span class="o">=</span><span class="s2">&quot;\</span>
+</span><span class='line'><span class="s2">${GREEN} \W\</span>
+</span><span class='line'><span class="s2">${RED} \$(gitify)\</span>
+</span><span class='line'><span class="s2">${GREEN}\</span>
+</span><span class='line'><span class="s2">${LIGHT_GRAY} $ &quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>make-prompt
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I&rsquo;ve added all the above into a file called <code>.bash_prompt</code> that get sourced from
+<code>.bashrc</code>.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -856,6 +1017,10 @@ TEST_F(ClientFixture, successfully_connects)
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/10/26/custom-git-prompt/">Custom Git Prompt</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/10/24/git-workflow-overview/">Git Workflow Overview</a>
       </li>
     
@@ -869,10 +1034,6 @@ TEST_F(ClientFixture, successfully_connects)
     
       <li class="post">
         <a href="/blog/2013/10/23/unit-testing-part-2/">Unit Testing: Part 2</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/09/29/unit-testing-part-1/">Unit Testing: Part 1</a>
       </li>
     
   </ul>
