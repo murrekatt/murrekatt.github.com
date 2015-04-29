@@ -47,15 +47,15 @@
         <lastmod>2014-10-26T19:02:11+01:00</lastmod>
     </url>
     <url>
-        <loc>http://murrekatt.github.com/gpg.key</loc>
-        <lastmod>2013-11-09T13:34:40+01:00</lastmod>
-    </url>
-    <url>
         <loc>http://murrekatt.github.com/</loc>
         <lastmod>2014-10-26T19:02:11+01:00</lastmod>
     </url>
     <url>
         <loc>http://murrekatt.github.com/tommy.txt.asc</loc>
         <lastmod>2015-02-08T10:29:36+01:00</lastmod>
+    </url>
+    <url>
+        <loc>http://murrekatt.github.com/tommyback.asc</loc>
+        <lastmod>2015-04-29T12:53:55+02:00</lastmod>
     </url>
 </urlset>
