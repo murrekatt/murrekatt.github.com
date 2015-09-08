@@ -4,7 +4,7 @@
   <title><![CDATA[Category: pre-signed-post | Tommy Back]]></title>
   <link href="http://murrekatt.github.com/blog/categories/pre-signed-post/atom.xml" rel="self"/>
   <link href="http://murrekatt.github.com/"/>
-  <updated>2015-09-08T13:19:26+02:00</updated>
+  <updated>2015-09-08T13:50:25+02:00</updated>
   <id>http://murrekatt.github.com/</id>
   <author>
     <name><![CDATA[Tommy Back]]></name>
@@ -18,12 +18,25 @@
     <link href="http://murrekatt.github.com/blog/2015/09/08/aws-s3-pre-signed-post-example-on-google-app-engine/"/>
     <updated>2015-09-08T12:49:00+02:00</updated>
     <id>http://murrekatt.github.com/blog/2015/09/08/aws-s3-pre-signed-post-example-on-google-app-engine</id>
-    <content type="html"><![CDATA[<p>As a follow-up post to my post about <a href="tommyback.com/blog/2015/09/08/offloading-static-content-for-your-web-service/">Offloading Your Static Content for Your
+    <content type="html"><![CDATA[<p>As a follow-up post to my post about <a href="http://tommyback.com/blog/2015/09/08/offloading-static-content-for-your-web-service/">Offloading Your Static Content for Your
 Web Service</a>
 I have created a small example <a href="https://cloud.google.com/appengine/docs">Google App Engine</a>
 project to demonstrate the HTTP POST from the browser.</p>
 
 <p>You can find the <a href="https://github.com/murrekatt/go-aws-s3-presigned-post-app-engine">example on Github here</a>.</p>
+
+<p>If you&rsquo;re only intersted in getting the AWS pre-signed POST in Go, please have a
+look at the <a href="https://github.com/murrekatt/go-s3presigned-post">small library I created and published on Github</a>.</p>
+
+<p>Two other Go related projects for AWS and S3:</p>
+
+<ul>
+<li><a href="https://github.com/aws/aws-sdk-go">AWS SDK Go</a></li>
+<li><a href="https://github.com/AdRoll/goamz">goamz</a></li>
+</ul>
+
+
+<p>Enjoy!</p>
 ]]></content>
   </entry>
   
