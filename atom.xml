@@ -4,7 +4,7 @@
   <title><![CDATA[Tommy Back]]></title>
   <link href="http://murrekatt.github.com/atom.xml" rel="self"/>
   <link href="http://murrekatt.github.com/"/>
-  <updated>2015-05-12T19:30:34+02:00</updated>
+  <updated>2015-09-08T12:20:27+02:00</updated>
   <id>http://murrekatt.github.com/</id>
   <author>
     <name><![CDATA[Tommy Back]]></name>
@@ -12,6 +12,140 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Offloading Static Content for Your Web Service]]></title>
+    <link href="http://murrekatt.github.com/blog/2015/09/08/offloading-static-content-for-your-web-service/"/>
+    <updated>2015-09-08T11:21:00+02:00</updated>
+    <id>http://murrekatt.github.com/blog/2015/09/08/offloading-static-content-for-your-web-service</id>
+    <content type="html"><![CDATA[<p>For web services with lot of static content that is user generated or user-
+consumed content like for instance sound or video, it would normally be sent to
+the backend and thus processed there. This means you need to pay bandwidth and
+processing of that data. It does not matter if you are hosted on a PaaS or run
+your own server infrastructure, you still need to pay to processthe data. You
+alos need to deal with scaling the delivery (see Content Delivery Networks).</p>
+
+<p>Unless you really need to get the data to your service endpoint there is a much
+better way to offload this and that is to use Amazon S3 or something similar
+like Google Blob Store. These can function like a CDN and can scale globally
+across datacenters and continents as needed by your service.</p>
+
+<p>Depending on the situation, e.g. if the web service is a public internet
+service, a company-internal service or who generates the content, who consumes
+it and how is it shared one would set up the overall system slightly different.</p>
+
+<p>For internet services, the use case is many times that users generate content
+and upload that as part of the service for themselves, for sharing or both. The
+content can be private, shared or public depending on. Let’s now look at the
+situation with a public internet service like Youtube where you manage videos
+that users upload.</p>
+
+<h2>Use Case</h2>
+
+<p>In a scenario like Youtube where you have a site where users can publicly
+search, play and share videos you basically want a storage that is readable by
+anyone and writable as the service allows. Here read means search and download,
+and, writable means create. Direct deletion of files should not be allowed as
+this is not expensive in terms of bandwidth or processing and the system might
+still want to keep the contents and just mark it not available.</p>
+
+<h3>Overview</h3>
+
+<p>What we want to set up is a AWS S3 bucket with public read and nothing else.
+I.e. anyone can download given a URL that points of an object in the bucket.
+Then we want to let the owner of the bucket, i.e. the controlling service
+hand out permissions to upload as users want to add new videos to the service.
+This means the service is aware of uploads and can control them.</p>
+
+<p>The permissions are essentially signed URLs or policies that describe what is
+allowed. E.g. user A is allowed to upload a file with a specific key
+(destination in the bucket), file size and within the next hour. After that
+the permission is no longer valid.</p>
+
+<p>Let’s see how to set this up with AWS S3.</p>
+
+<h3>Bucket</h3>
+
+<p>The bucket needs to be set up with public read and nothing else. This is best
+done with a bucket policy like so:</p>
+
+<pre><code>{
+  "Version": "2012-10-17",
+  "Id": "Policy1234567890",
+  "Statement": [{
+    "Sid": "Stmt1234567890",
+    "Effect": "Allow",
+    "Principal": {
+      "AWS": "*"
+    },
+    "Action": "s3:GetObject",
+    "Resource": "arn:aws:s3:::bucketnamehere/*"
+  }]
+}
+</code></pre>
+
+<p>No other permissions should be per default except for the owner (Me) there is a
+ACL (Access Control List) that gives all rights. Those rights are later given
+on a case by case basis to users that want to upload content.</p>
+
+<p>Let’s look at how to give permissions.</p>
+
+<h3>Pre-signed URLs</h3>
+
+<p>The simplest way to give permission to upload is to generate a pre-signed URL to
+be used with an HTTP PUT method. This means all necessary permission information
+is part of the URL as parameters.</p>
+
+<p>Please note that browsers do not support HTTP PUT so one must either do it with
+Javascript or do the second option which is HTTP POST.</p>
+
+<p>One can set an expiration when this URL no longer is valid.</p>
+
+<p>With this method it is not possible to restrict e.g. the file size or
+automatically know if the request was successful. This is possible with the
+second option pre-signed POST.</p>
+
+<h3>Pre-signed POST</h3>
+
+<p>The second option that also supports browsers is to do an HTTP POST with some
+pre-signed content that AWS S3 can verify to allow the upload. This option is
+more advanced than a pre-signed URL and it is possible to control things much
+more with this. It is also more complicated as it is a HTML form sent as a
+multipart HTTP request.</p>
+
+<p>The essence of this is that the owner (or someone with the right credentials)
+generate a policy that exactly describe what is allowed and signs it so that
+AWS S3 can verify that the HTTP POST is valid when it arrives.</p>
+
+<p>Both expiration and file size limits are possible to set up with the policy [5].</p>
+
+<p>One can also set up an HTTP redirect when something is successfully uploaded
+with the given permissions. This is of course useful to close the loop not
+knowing if someone actually uploaded what was intended and possibly leaving
+dangling ends in the service.</p>
+
+<h2>Summary</h2>
+
+<p>Today there are several good option how to offload user content to ease the
+workload on your endpoint. Options like Amazon S3 and Google Blob Store are
+very good options. The essensce is to have a storage that is scalable and
+restricted to what you need and then hand out permissions for read or write
+as needed by the users of your platform. This allows you to focus on building
+a great service and letting someone else deal with storing and delivering
+static content to your users, globally.</p>
+
+<h2>References</h2>
+
+<ul>
+<li>[1] <a href="http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-post-example.html">Example Browser-based POST.</a></li>
+<li>[2] <a href="http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-authentication-HTTPPOST.html">Authenticating requests in browser-based uploads using POST.</a></li>
+<li>[3] <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/HTTPPOSTForms.html">HTML Forms</a></li>
+<li>[4] <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/PresignedUrlUploadObject.html">Pre-Signed URL.</a></li>
+<li>[5] <a href="http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-HTTPPOSTConstructPolicy.html">Creating a POST policy.</a></li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Custom Git Prompt]]></title>

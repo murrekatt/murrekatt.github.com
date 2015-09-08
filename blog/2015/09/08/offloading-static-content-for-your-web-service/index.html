@@ -1,0 +1,413 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Offloading Static Content for Your Web Service - Tommy Back</title>
+  <meta name="author" content="Tommy Back">
+
+  
+  <meta name="description" content="For web services with lot of static content that is user generated or user-
+consumed content like for instance sound or video, it would normally be &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://murrekatt.github.com/blog/2015/09/08/offloading-static-content-for-your-web-service">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Tommy Back" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+
+<script src="/javascripts/random-background-image.js"></script>
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+</hgroup>
+
+</header>
+  <!-- <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:murrekatt.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav> -->
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Offloading Static Content for Your Web Service</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-09-08T11:21:00+02:00" pubdate data-updated="true">Sep 8<span>th</span>, 2015</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>For web services with lot of static content that is user generated or user-
+consumed content like for instance sound or video, it would normally be sent to
+the backend and thus processed there. This means you need to pay bandwidth and
+processing of that data. It does not matter if you are hosted on a PaaS or run
+your own server infrastructure, you still need to pay to processthe data. You
+alos need to deal with scaling the delivery (see Content Delivery Networks).</p>
+
+<p>Unless you really need to get the data to your service endpoint there is a much
+better way to offload this and that is to use Amazon S3 or something similar
+like Google Blob Store. These can function like a CDN and can scale globally
+across datacenters and continents as needed by your service.</p>
+
+<p>Depending on the situation, e.g. if the web service is a public internet
+service, a company-internal service or who generates the content, who consumes
+it and how is it shared one would set up the overall system slightly different.</p>
+
+<p>For internet services, the use case is many times that users generate content
+and upload that as part of the service for themselves, for sharing or both. The
+content can be private, shared or public depending on. Let’s now look at the
+situation with a public internet service like Youtube where you manage videos
+that users upload.</p>
+
+<h2>Use Case</h2>
+
+<p>In a scenario like Youtube where you have a site where users can publicly
+search, play and share videos you basically want a storage that is readable by
+anyone and writable as the service allows. Here read means search and download,
+and, writable means create. Direct deletion of files should not be allowed as
+this is not expensive in terms of bandwidth or processing and the system might
+still want to keep the contents and just mark it not available.</p>
+
+<h3>Overview</h3>
+
+<p>What we want to set up is a AWS S3 bucket with public read and nothing else.
+I.e. anyone can download given a URL that points of an object in the bucket.
+Then we want to let the owner of the bucket, i.e. the controlling service
+hand out permissions to upload as users want to add new videos to the service.
+This means the service is aware of uploads and can control them.</p>
+
+<p>The permissions are essentially signed URLs or policies that describe what is
+allowed. E.g. user A is allowed to upload a file with a specific key
+(destination in the bucket), file size and within the next hour. After that
+the permission is no longer valid.</p>
+
+<p>Let’s see how to set this up with AWS S3.</p>
+
+<h3>Bucket</h3>
+
+<p>The bucket needs to be set up with public read and nothing else. This is best
+done with a bucket policy like so:</p>
+
+<pre><code>{
+  "Version": "2012-10-17",
+  "Id": "Policy1234567890",
+  "Statement": [{
+    "Sid": "Stmt1234567890",
+    "Effect": "Allow",
+    "Principal": {
+      "AWS": "*"
+    },
+    "Action": "s3:GetObject",
+    "Resource": "arn:aws:s3:::bucketnamehere/*"
+  }]
+}
+</code></pre>
+
+<p>No other permissions should be per default except for the owner (Me) there is a
+ACL (Access Control List) that gives all rights. Those rights are later given
+on a case by case basis to users that want to upload content.</p>
+
+<p>Let’s look at how to give permissions.</p>
+
+<h3>Pre-signed URLs</h3>
+
+<p>The simplest way to give permission to upload is to generate a pre-signed URL to
+be used with an HTTP PUT method. This means all necessary permission information
+is part of the URL as parameters.</p>
+
+<p>Please note that browsers do not support HTTP PUT so one must either do it with
+Javascript or do the second option which is HTTP POST.</p>
+
+<p>One can set an expiration when this URL no longer is valid.</p>
+
+<p>With this method it is not possible to restrict e.g. the file size or
+automatically know if the request was successful. This is possible with the
+second option pre-signed POST.</p>
+
+<h3>Pre-signed POST</h3>
+
+<p>The second option that also supports browsers is to do an HTTP POST with some
+pre-signed content that AWS S3 can verify to allow the upload. This option is
+more advanced than a pre-signed URL and it is possible to control things much
+more with this. It is also more complicated as it is a HTML form sent as a
+multipart HTTP request.</p>
+
+<p>The essence of this is that the owner (or someone with the right credentials)
+generate a policy that exactly describe what is allowed and signs it so that
+AWS S3 can verify that the HTTP POST is valid when it arrives.</p>
+
+<p>Both expiration and file size limits are possible to set up with the policy [5].</p>
+
+<p>One can also set up an HTTP redirect when something is successfully uploaded
+with the given permissions. This is of course useful to close the loop not
+knowing if someone actually uploaded what was intended and possibly leaving
+dangling ends in the service.</p>
+
+<h2>Summary</h2>
+
+<p>Today there are several good option how to offload user content to ease the
+workload on your endpoint. Options like Amazon S3 and Google Blob Store are
+very good options. The essensce is to have a storage that is scalable and
+restricted to what you need and then hand out permissions for read or write
+as needed by the users of your platform. This allows you to focus on building
+a great service and letting someone else deal with storing and delivering
+static content to your users, globally.</p>
+
+<h2>References</h2>
+
+<ul>
+<li>[1] <a href="http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-post-example.html">Example Browser-based POST.</a></li>
+<li>[2] <a href="http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-authentication-HTTPPOST.html">Authenticating requests in browser-based uploads using POST.</a></li>
+<li>[3] <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/HTTPPOSTForms.html">HTML Forms</a></li>
+<li>[4] <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/PresignedUrlUploadObject.html">Pre-Signed URL.</a></li>
+<li>[5] <a href="http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-HTTPPOSTConstructPolicy.html">Creating a POST policy.</a></li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Tommy Back</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-09-08T11:21:00+02:00" pubdate data-updated="true">Sep 8<span>th</span>, 2015</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/aws/'>aws</a>, <a class='category' href='/blog/categories/cdn/'>cdn</a>, <a class='category' href='/blog/categories/data/'>data</a>, <a class='category' href='/blog/categories/offloading/'>offloading</a>, <a class='category' href='/blog/categories/s3/'>s3</a>, <a class='category' href='/blog/categories/scaling/'>scaling</a>, <a class='category' href='/blog/categories/static-content/'>static-content</a>, <a class='category' href='/blog/categories/web/'>web</a>, <a class='category' href='/blog/categories/web-service/'>web-service</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/10/26/custom-git-prompt/" title="Previous Post: Custom Git Prompt">&laquo; Custom Git Prompt</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>About Me</h1>
+  <p>
+    Hi, my name is Tommy Back and this is my personal website. I'm a curious person
+    with a love for nature, technology and building things. I'm a Finland-Swede 
+    living in beautiful Switzerland with my lovely family.
+  </p>
+  <p>
+    Here is my <b><a href="tommyback.asc">GPG key</a></b>.
+  </p>
+</section>
+<section>
+  <ul id="recent_posts">
+      <li class="post">
+      <a href="/" alt="Home"><img src="/images/Home.png"></a>
+      <a href="/archives" alt="Archives"><img src="/images/Calendar.png"></a>
+      <a href="/about" alt="About"><img src="/images/Bio.png"></a>
+      <a href="/atom.xml" alt="subscribe feed"><img src="/images/rss_big.png"></a>
+      </li>
+  </ul>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/09/08/offloading-static-content-for-your-web-service/">Offloading Static Content for Your Web Service</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/10/26/custom-git-prompt/">Custom Git Prompt</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/10/24/git-workflow-overview/">Git Workflow Overview</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/10/30/unit-testing-part-4/">Unit Testing: Part 4</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/10/25/unit-testing-part-3/">Unit Testing: Part 3</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/murrekatt">@murrekatt</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'murrekatt',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Tommy Back -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'tommyback';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://murrekatt.github.com/blog/2015/09/08/offloading-static-content-for-your-web-service/';
+        var disqus_url = 'http://murrekatt.github.com/blog/2015/09/08/offloading-static-content-for-your-web-service/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
