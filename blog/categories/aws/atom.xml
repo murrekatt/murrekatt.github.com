@@ -4,7 +4,7 @@
   <title><![CDATA[Category: aws | Tommy Back]]></title>
   <link href="http://murrekatt.github.com/blog/categories/aws/atom.xml" rel="self"/>
   <link href="http://murrekatt.github.com/"/>
-  <updated>2015-09-08T12:20:27+02:00</updated>
+  <updated>2015-09-08T13:19:26+02:00</updated>
   <id>http://murrekatt.github.com/</id>
   <author>
     <name><![CDATA[Tommy Back]]></name>
@@ -12,6 +12,20 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[AWS S3 Pre-signed POST Example on Google App Engine]]></title>
+    <link href="http://murrekatt.github.com/blog/2015/09/08/aws-s3-pre-signed-post-example-on-google-app-engine/"/>
+    <updated>2015-09-08T12:49:00+02:00</updated>
+    <id>http://murrekatt.github.com/blog/2015/09/08/aws-s3-pre-signed-post-example-on-google-app-engine</id>
+    <content type="html"><![CDATA[<p>As a follow-up post to my post about <a href="tommyback.com/blog/2015/09/08/offloading-static-content-for-your-web-service/">Offloading Your Static Content for Your
+Web Service</a>
+I have created a small example <a href="https://cloud.google.com/appengine/docs">Google App Engine</a>
+project to demonstrate the HTTP POST from the browser.</p>
+
+<p>You can find the <a href="https://github.com/murrekatt/go-aws-s3-presigned-post-app-engine">example on Github here</a>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Offloading Static Content for Your Web Service]]></title>
