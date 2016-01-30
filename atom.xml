@@ -4,7 +4,7 @@
   <title><![CDATA[Tommy Back]]></title>
   <link href="http://murrekatt.github.com/atom.xml" rel="self"/>
   <link href="http://murrekatt.github.com/"/>
-  <updated>2015-11-22T14:00:01+01:00</updated>
+  <updated>2016-01-30T10:04:23+01:00</updated>
   <id>http://murrekatt.github.com/</id>
   <author>
     <name><![CDATA[Tommy Back]]></name>
@@ -12,6 +12,76 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Adding headers to source files]]></title>
+    <link href="http://murrekatt.github.com/blog/2016/01/30/adding-headers-to-source-files/"/>
+    <updated>2016-01-30T09:52:00+01:00</updated>
+    <id>http://murrekatt.github.com/blog/2016/01/30/adding-headers-to-source-files</id>
+    <content type="html"><![CDATA[<p>Note to self. Sometimes one needs to add a header part, e.g. copyright or
+license information to many files. To not have to do this manually one can
+conveniently do it with the script below.</p>
+
+<figure class='code'><figcaption><span>[language:shell] </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#!/bin/sh
+</span><span class='line'>
+</span><span class='line'>project="MyProject"
+</span><span class='line'>author="Tommy Back"
+</span><span class='line'>data="29/1/16"
+</span><span class='line'>copyright="2016 Tommy Back"
+</span><span class='line'>
+</span><span class='line'>files=$(find . -name "*.swift" -o -name "*.h" -o -name "*.m")
+</span><span class='line'>
+</span><span class='line'>for f in $files; do
+</span><span class='line'>  if [ ! -f $f ]; then
+</span><span class='line'>    continue
+</span><span class='line'>  fi
+</span><span class='line'>
+</span><span class='line'>  header="\
+</span><span class='line'>//\n\
+</span><span class='line'>//  ${f##*/}\n\
+</span><span class='line'>//  $project\n\
+</span><span class='line'>//\n\
+</span><span class='line'>//  Created by $author on $date.\n\
+</span><span class='line'>//  Copyright © $copyright. All rights reserved.\n\
+</span><span class='line'>//\n\
+</span><span class='line'>\
+</span><span class='line'>"
+</span><span class='line'>
+</span><span class='line'>  echo -e $header | cat - $f > /tmp/out && mv /tmp/out $f
+</span><span class='line'>done</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This example runs in an iOS project to add to all Swift and Objective-C files.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[AWS S3 Pre-signed POST Example on Google App Engine]]></title>

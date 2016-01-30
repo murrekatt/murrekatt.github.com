@@ -9,10 +9,8 @@
   <meta name="author" content="Tommy Back">
 
   
-  <meta name="description" content="As a follow-up post to my post about Offloading Your Static Content for Your
-Web Service
-I have created a small example Google App Engine
-project to &hellip;">
+  <meta name="description" content="Note to self. Sometimes one needs to add a header part, e.g. copyright or
+license information to many files. To not have to do this manually one can &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -67,6 +65,103 @@ project to &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2016/01/30/adding-headers-to-source-files/">Adding Headers to Source Files</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-01-30T09:52:00+01:00" pubdate data-updated="true">Jan 30<span>th</span>, 2016</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Note to self. Sometimes one needs to add a header part, e.g. copyright or
+license information to many files. To not have to do this manually one can
+conveniently do it with the script below.</p>
+
+<figure class='code'><figcaption><span>[language:shell] </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#!/bin/sh
+</span><span class='line'>
+</span><span class='line'>project="MyProject"
+</span><span class='line'>author="Tommy Back"
+</span><span class='line'>data="29/1/16"
+</span><span class='line'>copyright="2016 Tommy Back"
+</span><span class='line'>
+</span><span class='line'>files=$(find . -name "*.swift" -o -name "*.h" -o -name "*.m")
+</span><span class='line'>
+</span><span class='line'>for f in $files; do
+</span><span class='line'>  if [ ! -f $f ]; then
+</span><span class='line'>    continue
+</span><span class='line'>  fi
+</span><span class='line'>
+</span><span class='line'>  header="\
+</span><span class='line'>//\n\
+</span><span class='line'>//  ${f##*/}\n\
+</span><span class='line'>//  $project\n\
+</span><span class='line'>//\n\
+</span><span class='line'>//  Created by $author on $date.\n\
+</span><span class='line'>//  Copyright © $copyright. All rights reserved.\n\
+</span><span class='line'>//\n\
+</span><span class='line'>\
+</span><span class='line'>"
+</span><span class='line'>
+</span><span class='line'>  echo -e $header | cat - $f > /tmp/out && mv /tmp/out $f
+</span><span class='line'>done</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This example runs in an iOS project to add to all Swift and Objective-C files.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1163,43 +1258,9 @@ TEST_F(ClientFixture, successfully_connects)
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/12/02/first-post/">First Post</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-12-02T16:44:00+01:00" pubdate data-updated="true">Dec 2<span>nd</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>So, finally I&rsquo;ve decided to start collecting and sharing some things I&rsquo;ve come across that I think others might benefit from. Primarily it&rsquo;ll function as a notebook to myself about various topics. Hope you&rsquo;ll enjoy it!</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
+    
+      <a class="prev" href="/blog/page/2/">&larr; Older</a>
     
     <a href="/blog/archives">Blog Archives</a>
     
@@ -1233,6 +1294,10 @@ TEST_F(ClientFixture, successfully_connects)
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2016/01/30/adding-headers-to-source-files/">Adding Headers to Source Files</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/09/08/aws-s3-pre-signed-post-example-on-google-app-engine/">AWS S3 Pre-signed POST Example on Google App Engine</a>
       </li>
     
@@ -1246,10 +1311,6 @@ TEST_F(ClientFixture, successfully_connects)
     
       <li class="post">
         <a href="/blog/2014/10/24/git-workflow-overview/">Git Workflow Overview</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/10/30/unit-testing-part-4/">Unit Testing: Part 4</a>
       </li>
     
   </ul>
@@ -1295,7 +1356,7 @@ TEST_F(ClientFixture, successfully_connects)
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2015 - Tommy Back -
+  Copyright &copy; 2016 - Tommy Back -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
